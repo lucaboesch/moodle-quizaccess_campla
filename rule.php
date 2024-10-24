@@ -41,12 +41,21 @@ class quizaccess_campla extends access_rule_base {
      * @param MoodleQuickForm $mform the wrapped MoodleQuickForm.
      */
     public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
-        global $COURSE;
+        global $COURSE, $PAGE;
         $context = context_course::instance($COURSE->id);
         $canusecampla = has_capability('quizaccess/campla:canusecampla', $context);
 
         if ($canusecampla) {
             settings_provider::add_campla_settings_fields($quizform, $mform);
+            $PAGE->requires->js_call_amd(
+                'quizaccess_campla/modalforms',
+                'modalForm',
+                ['[data-action=opencamplasubmitquizform]',
+                    \quizaccess_campla\form\submitticketform::class,
+                    get_string('generatecamplaconfiguration', 'quizaccess_campla'),
+                    ['hidebuttons' => 1],
+                ],
+            );
         }
     }
 }

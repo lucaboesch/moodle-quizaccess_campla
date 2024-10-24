@@ -25,6 +25,10 @@
 
 namespace quizaccess_campla;
 
+defined('MOODLE_INTERNAL') || die;
+
+require_once($CFG->dirroot . '/question/editlib.php');
+
 /**
  * Helper class for providing quiz settings, to make setting up quiz form manageable.
  *
@@ -93,12 +97,11 @@ class settings_provider {
      * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
      */
     protected static function add_campla_button(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
-        $generatecamplabutton = \html_writer::link(new \moodle_url('/reportbuilder/index.php'),
-            get_string('generatecamplaconfiguration', 'quizaccess_campla'), [
-            'class' => 'btn btn-secondary',
-            'title' => get_string('generatecamplaconfiguration', 'quizaccess_campla'),
-            'role' => 'button',
-        ]);
+        $generatecamplabutton = \html_writer::tag('button', get_string('generatecamplaconfiguration', 'quizaccess_campla'),
+            ['class' => 'btn btn-secondary',
+            'data-action' => 'opencamplasubmitquizform',
+            'onclick' => 'event.preventDefault();']
+            );
         $element = $mform->createElement(
             'static',
             'static',

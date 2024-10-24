@@ -30,9 +30,13 @@ $string['camplabasisurl'] = 'CAMPLA basis URL';
 $string['camplabasisurl_desc'] = 'CAMPLA basis URL setting description';
 $string['camplasecret'] = 'CAMPLA secret';
 $string['camplasecret_desc'] = 'CAMPLA secret setting description';
+$string['coursename'] = 'Course name';
 $string['generatecamplaconfiguration'] = 'Generate CAMPLA configuration';
+$string['na'] = 'N/A';
 $string['pluginname'] = 'CAMPLA exam configuration';
 $string['privacy:metadata'] = 'The CAMPLA quiz access plugin does not store any personal data.';
+$string['quizname'] = 'Quiz name';
+$string['quizurl'] = 'Quiz URL';
 $string['settingnotification'] = 'Please note that the following settings relay on a a valid set up CAMPLA (Cloud Assessment
     Management Platform) see <a href="https://campla.github.io">https://campla.github.io</a> for more information.';
-
+$string['submitlabel'] = 'Send to CAMPLA';
