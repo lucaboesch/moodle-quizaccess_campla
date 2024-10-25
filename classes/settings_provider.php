@@ -119,6 +119,9 @@ class settings_provider {
      * @return string The localized quiz name.
      */
     public static function get_campla_quizname(int $cmid): string {
+        if ($cmid === 0) {
+            return '';
+        }
         [$quiz, ] = get_module_from_cmid($cmid);
         return format_string($quiz->name, true, ['context' => \context_module::instance($cmid)]);
     }
@@ -130,6 +133,9 @@ class settings_provider {
      * @return string The quiz url.
      */
     public static function get_campla_quizurl(int $cmid): string {
+        if ($cmid === 0) {
+            return '';
+        }
         return new \moodle_url('/mod/quiz/view.php', ['cmid' => $cmid]);
     }
 
@@ -140,6 +146,9 @@ class settings_provider {
      * @return int The quiz timeopen value.
      */
     public static function get_campla_timeopen(int $cmid): int {
+        if ($cmid === 0) {
+            return 0;
+        }
         [$quiz, ] = get_module_from_cmid($cmid);
         return $quiz->timeopen;
     }
@@ -151,6 +160,9 @@ class settings_provider {
      * @return int The quiz timeclose value.
      */
     public static function get_campla_timeclose(int $cmid): int {
+        if ($cmid === 0) {
+            return 0;
+        }
         [$quiz, ] = get_module_from_cmid($cmid);
         return $quiz->timeclose;
     }
@@ -162,6 +174,9 @@ class settings_provider {
      * @return string The localized course name.
      */
     public static function get_campla_coursename(int $cmid): string {
+        if ($cmid === 0) {
+            return '';
+        }
         [$quiz, ] = get_module_from_cmid($cmid);
         $course = get_course($quiz->course);
         return format_string($course->fullname, true, ['context' => \context_module::instance($cmid)]);

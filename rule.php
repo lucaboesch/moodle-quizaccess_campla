@@ -54,7 +54,7 @@ class quizaccess_campla extends access_rule_base {
                 'quizaccess_campla/modalforms',
                 'modalForm',
                 ['[data-action=opencamplasubmitquizform]',
-                    \quizaccess_campla\form\submitticketform::class,
+                    \quizaccess_campla\form\sendtocamplaform::class,
                     get_string('generatecamplaconfiguration', 'quizaccess_campla'),
                     ['hidebuttons' => 1, 'cmid' => $cmid],
                 ],

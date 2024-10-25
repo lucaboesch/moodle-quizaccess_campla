@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Form to Submit Tickets
+ * Form to send a quiz configuration to CAMPLA
  *
  * @package    quizaccess_campla
  * @author     Luca Bösch <luca.boesch@bfh.ch>
@@ -36,16 +36,13 @@ require_once($CFG->libdir . '/filelib.php');
 require_login();
 
 /**
- * Form to Submit Tickets
- *
- * This form is To Submit Tickets
- * By Users
+ * Form to send a quiz configuration to CAMPLA
  *
  * @package    quizaccess_campla
  * @copyright  2024 BFH Bern University of Applied Sciences
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class submitticketform extends \core_form\dynamic_form {
+class sendtocamplaform extends \core_form\dynamic_form {
 
     /**
      * Returns form context
@@ -74,28 +71,7 @@ class submitticketform extends \core_form\dynamic_form {
      *
      */
     public function set_data_for_dynamic_submission(): void {
-        $cmid = isset($this->_ajaxformdata['cmid']) ? (int) $this->_ajaxformdata['cmid'] : 0;
-        $quizname = \quizaccess_campla\settings_provider::get_campla_quizname($cmid);
-        $coursename = \quizaccess_campla\settings_provider::get_campla_coursename($cmid);
-        $quizurl = new \moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
-        if (\quizaccess_campla\settings_provider::get_campla_timeopen($cmid) !== 0) {
-            $quizopens = \core_date::strftime(get_string('strftimerecentfull', 'langconfig'),
-                \quizaccess_campla\settings_provider::get_campla_timeopen($cmid));
-        } else {
-            $quizopens = get_string('na', 'quizaccess_campla');
-        }
-        if (\quizaccess_campla\settings_provider::get_campla_timeclose($cmid) !== 0) {
-            $quizcloses = \core_date::strftime(get_string('strftimerecentfull', 'langconfig'),
-                \quizaccess_campla\settings_provider::get_campla_timeclose($cmid));
-        } else {
-            $quizcloses = get_string('na', 'quizaccess_campla');
-        }
         $this->set_data([
-            'quizname' => $quizname,
-            'coursename' => $coursename,
-            'quizurl' => $quizurl,
-            'quizopens' => $quizopens,
-            'quizcloses' => $quizcloses,
             'hidebuttons' => $this->optional_param('hidebuttons', false, PARAM_BOOL),
         ]);
     }
@@ -112,17 +88,17 @@ class submitticketform extends \core_form\dynamic_form {
     public function process_dynamic_submission() {
         $formdata = $this->get_data();
         lib::init();
-        $success = lib::submit_ticket($formdata);
+        $success = lib::sendtocampla($formdata);
 
         if ($success) {
             return [
                 'status' => 200,
-                'message' => get_string('ticket_submission_success', 'local_tickets'),
+                'message' => get_string('sendtocamplasuccess', 'quizaccess_campla'),
             ];
         }
         return [
             'status' => 500,
-            'message' => get_string('ticket_submission_fail', 'local_tickets'),
+            'message' => get_string('sendtocamplafail', 'quizaccess_campla'),
         ];
     }
 
@@ -147,7 +123,6 @@ class submitticketform extends \core_form\dynamic_form {
         $this->_ajaxformdata['cmid'];
         global $CFG, $USER;
         $mform = $this->_form;
-        echo $this->_form->_pageparams;
 
         $mform->addElement('text', 'quizname', get_string('quizname', 'quizaccess_campla'));
         $mform->setType('quizname', PARAM_NOTAGS);
@@ -155,9 +130,10 @@ class submitticketform extends \core_form\dynamic_form {
 
         $mform->addElement('text', 'coursename', get_string('coursename', 'quizaccess_campla'));
         $mform->setType('coursename', PARAM_NOTAGS);
+        $mform->addRule('coursename', get_string('required'), 'required', null, 'client');
 
         $mform->addElement('text', 'quizurl', get_string('quizurl', 'quizaccess_campla'));
-        $mform->setType('quizurl', PARAM_NOTAGS);
+        $mform->setType('quizurl', PARAM_URL);
 
         $mform->addElement('text', 'quizopens', get_string('quizopens', 'mod_quiz'));
         $mform->setType('quizopens', PARAM_NOTAGS);
@@ -165,10 +141,56 @@ class submitticketform extends \core_form\dynamic_form {
         $mform->addElement('text', 'quizcloses', get_string('quizcloses', 'mod_quiz'));
         $mform->setType('quizcloses', PARAM_NOTAGS);
 
+        $mform->addElement('hidden', 'quizstarturl');
+        $mform->setType('quizstarturl', PARAM_URL);
+
+        $mform->addElement('hidden', 'quizopensunixtime');
+        $mform->setType('quizopensunixtime', PARAM_INT);
+
+        $mform->addElement('hidden', 'quizclosesunixtime');
+        $mform->setType('quizclosesunixtime', PARAM_INT);
+
+        $mform->addElement('hidden', 'cmid');
+        $mform->setType('cmid', PARAM_INT);
+
         $mform->freeze(['quizurl', 'quizopens', 'quizcloses']);
 
         if (empty($this->_ajaxformdata['hidebuttons'])) {
             $this->add_action_buttons(true, get_string('submitlabel', 'quizaccess_campla'));
         }
+
+        $cmid = isset($this->_ajaxformdata['cmid']) ? (int) $this->_ajaxformdata['cmid'] : 0;
+        $quizname = \quizaccess_campla\settings_provider::get_campla_quizname($cmid);
+        $coursename = \quizaccess_campla\settings_provider::get_campla_coursename($cmid);
+        $quizurl = new \moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
+        if (\quizaccess_campla\settings_provider::get_campla_timeopen($cmid) !== 0) {
+            $quizopens = \core_date::strftime(get_string('strftimerecentfull', 'langconfig'),
+                \quizaccess_campla\settings_provider::get_campla_timeopen($cmid));
+            $quizopensunixtime = \quizaccess_campla\settings_provider::get_campla_timeopen($cmid);
+        } else {
+            $quizopens = get_string('na', 'quizaccess_campla');
+            $quizopensunixtime = 0;
+        }
+        if (\quizaccess_campla\settings_provider::get_campla_timeclose($cmid) !== 0) {
+            $quizcloses = \core_date::strftime(get_string('strftimerecentfull', 'langconfig'),
+                \quizaccess_campla\settings_provider::get_campla_timeclose($cmid));
+            $quizclosesunixtime = \quizaccess_campla\settings_provider::get_campla_timeclose($cmid);
+        } else {
+            $quizcloses = get_string('na', 'quizaccess_campla');
+            $quizclosesunixtime = 0;
+        }
+
+        $this->set_data([
+            'quizname' => $quizname,
+            'coursename' => $coursename,
+            'quizurl' => $quizurl,
+            'quizstarturl' => $quizurl,
+            'quizopens' => $quizopens,
+            'quizcloses' => $quizcloses,
+            'quizopensunixtime' => $quizopensunixtime,
+            'quizclosesunixtime' => $quizclosesunixtime,
+            'cmid' => $cmid,
+            'hidebuttons' => $this->optional_param('hidebuttons', false, PARAM_BOOL),
+        ]);
     }
 }

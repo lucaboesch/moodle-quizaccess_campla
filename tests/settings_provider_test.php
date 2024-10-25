@@ -231,9 +231,8 @@ final class settings_provider_test extends \advanced_testcase {
         $this->set_up_user_and_role();
 
         $coursecontext = \context_course::instance($this->course->id);
-        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
 
-        $this->assertEquals(get_enrolled_users($coursecontext, 'moodle/role:student', 0, 'u.*', null, 0, 0, true, $studentrole->id),
+        $this->assertEquals(get_enrolled_users($coursecontext, 'mod/quiz:attempt', 0, 'u.*', null, 0, 0, true),
             settings_provider::get_campla_coursestudents($this->quiz->cmid));
     }
 }

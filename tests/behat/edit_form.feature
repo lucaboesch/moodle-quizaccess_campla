@@ -40,6 +40,7 @@ Feature: CAMPLA button in quiz edit form
     And I expand all fieldsets
     And I click on "Generate CAMPLA configuration" "button"
     Then I should see "Generate CAMPLA configuration"
+    And I should see "Send to CAMPLA"
     And the field "Quiz name" matches value "Quiz 1"
     And the field "Course name" matches value "Course 1"
     And the field "Quiz opens" matches value "<timeopen>%a, %d %b %Y, %I:%M %p##"
