@@ -1,5 +1,6 @@
 import ModalForm from 'core_form/modalform';
 import {add as addToast} from 'core/toast';
+import {getString} from 'core/str';
 
 const addNotification = (msg, type) => {
     addToast(msg, {type: type});
@@ -12,10 +13,11 @@ export const modalForm = (linkSelector, formClass, title, args = {...args, hideb
             formClass,
             args: args,
             modalConfig: {title: title},
+            saveButtonText: getString('sendtocampla', 'quizaccess_campla'),
             returnFocus: e.currentTarget
         });
         form.addEventListener(form.events.FORM_SUBMITTED, (e) => {
-            // Comes from process_dynamic_submission() in submitticketform.php
+            // Comes from process_dynamic_submission() in sendtocamplaform.php
             const response = e.detail;
             const type = response.status == 200 ? 'success' : 'danger';
             addNotification(response.message, type);
