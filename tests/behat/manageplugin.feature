@@ -10,8 +10,10 @@ Feature: Configuration of the CAMPLA quiz access rule
     And I navigate to "Plugins > Activity modules > Quiz > CAMPLA" in site administration
     And I set the field "CAMPLA basis URL" to "https://campla.moodle.org"
     And I set the field "CAMPLA secret" to "1UmPYTe3Th1_95"
+    And I set the field "CAMPLA App ID" to "313"
     And I press "Save changes"
     When I navigate to "Plugins > Activity modules > Quiz > CAMPLA" in site administration
     Then the field "CAMPLA basis URL" matches value "https://campla.moodle.org"
     And the field "CAMPLA secret" matches value "1UmPYTe3Th1_95"
+    And the field "CAMPLA App ID" matches value "313"
     And I log out
