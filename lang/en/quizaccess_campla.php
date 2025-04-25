@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['campla'] = 'CAMPLA';
+$string['campla:canusecampla'] = 'Can use CAMPLA for a quiz setup.';
 $string['camplabasisurl'] = 'CAMPLA basis URL';
 $string['camplabasisurl_desc'] = 'CAMPLA basis URL setting description';
 $string['camplasecret'] = 'CAMPLA secret';
@@ -43,3 +44,4 @@ $string['sendtocamplasuccess'] = 'Sent to CAMPLA Successfully';
 $string['settingnotification'] = 'Please note that the following settings relay on a a valid set up CAMPLA (Cloud Assessment
     Management Platform) see <a href="https://campla.github.io">https://campla.github.io</a> for more information.';
 $string['submitlabel'] = 'Send to CAMPLA';
+
