@@ -27,10 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['campla'] = 'CAMPLA';
 $string['campla:canusecampla'] = 'Can use CAMPLA for a quiz setup.';
+$string['camplaappid'] = 'CAMPLA App ID';
+$string['camplaappid_desc'] = 'The App ID CAMPLA uses to identify the Moodle instance.';
 $string['camplabasisurl'] = 'CAMPLA basis URL';
-$string['camplabasisurl_desc'] = 'CAMPLA basis URL setting description';
+$string['camplabasisurl_desc'] = 'URL used to access the CAMPLA API.';
 $string['camplasecret'] = 'CAMPLA secret';
-$string['camplasecret_desc'] = 'CAMPLA secret setting description';
+$string['camplasecret_desc'] = 'The secret CAMPLA uses to identify the Moodle instance.';
 $string['coursename'] = 'Course name';
 $string['generatecamplaconfiguration'] = 'Generate CAMPLA configuration';
 $string['na'] = 'N/A';
