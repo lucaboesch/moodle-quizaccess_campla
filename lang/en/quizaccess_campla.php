@@ -27,18 +27,19 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['campla'] = 'CAMPLA';
 $string['campla:canusecampla'] = 'Can use CAMPLA for a quiz setup.';
-$string['camplaappid'] = 'CAMPLA App ID';
-$string['camplaappid_desc'] = 'The App ID CAMPLA uses to identify the Moodle instance.';
-$string['camplabasisurl'] = 'CAMPLA basis URL';
+$string['camplaappid'] = 'CAMPLA Application ID';
+$string['camplaappid_desc'] = 'The Application ID CAMPLA uses to identify the Moodle instance.';
+$string['camplabasisurl'] = 'CAMPLA REST API URL';
 $string['camplabasisurl_desc'] = 'URL used to access the CAMPLA API.';
-$string['camplasecret'] = 'CAMPLA secret';
-$string['camplasecret_desc'] = 'The secret CAMPLA uses to identify the Moodle instance.';
+$string['camplasecret'] = 'CAMPLA Application secret';
+$string['camplasecret_desc'] = 'The Application secret CAMPLA uses to identify the Moodle instance.';
 $string['coursename'] = 'Course name';
 $string['generatecamplaconfiguration'] = 'Generate CAMPLA configuration';
 $string['na'] = 'N/A';
 $string['pluginname'] = 'CAMPLA exam configuration';
 $string['privacy:metadata'] = 'The CAMPLA quiz access plugin does not store any personal data.';
 $string['quizname'] = 'Quiz name';
+$string['quizowner'] = 'Quiz owner';
 $string['quizurl'] = 'Quiz URL';
 $string['sendtocampla'] = 'Send to CAMPLA';
 $string['sendtocamplafail'] = 'Failed sending to CAMPLA';
@@ -46,4 +47,3 @@ $string['sendtocamplasuccess'] = 'Sent to CAMPLA Successfully';
 $string['settingnotification'] = 'Please note that the following settings relay on a a valid set up CAMPLA (Cloud Assessment
     Management Platform) see <a href="https://campla.github.io">https://campla.github.io</a> for more information.';
 $string['submitlabel'] = 'Send to CAMPLA';
-

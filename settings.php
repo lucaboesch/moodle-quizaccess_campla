@@ -31,23 +31,39 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_heading(
         'quizaccess_campla/settingnotification',
         '',
-        $OUTPUT->notification(get_string('settingnotification', 'quizaccess_campla'), 'warning')));
+        $OUTPUT->notification(
+            get_string('settingnotification', 'quizaccess_campla'),
+            'warning',
+        )
+    ));
 
-    $settings->add(new admin_setting_configtext('quizaccess_campla/camplabasisurl',
-        get_string('camplabasisurl', 'quizaccess_campla'),
-        get_string('camplabasisurl_desc', 'quizaccess_campla'),
-        '',
-        PARAM_URL));
+    $settings->add(
+        new admin_setting_configtext(
+            'quizaccess_campla/camplabasisurl',
+            get_string('camplabasisurl', 'quizaccess_campla'),
+            get_string('camplabasisurl_desc', 'quizaccess_campla'),
+            '',
+            PARAM_URL,
+        )
+    );
 
-    $settings->add(new admin_setting_configtext('quizaccess_campla/secret',
-        get_string('camplasecret', 'quizaccess_campla'),
-        get_string('camplasecret_desc', 'quizaccess_campla'),
-        '',
-        PARAM_RAW));
+    $settings->add(
+        new admin_setting_configtext(
+            'quizaccess_campla/secret',
+            get_string('camplasecret', 'quizaccess_campla'),
+            get_string('camplasecret_desc', 'quizaccess_campla'),
+            '',
+            PARAM_RAW,
+        )
+    );
 
-    $settings->add(new admin_setting_configtext('quizaccess_campla/appid',
-        get_string('camplaappid', 'quizaccess_campla'),
-        get_string('camplaappid_desc', 'quizaccess_campla'),
-        '',
-        PARAM_RAW));
+    $settings->add(
+        new admin_setting_configtext(
+            'quizaccess_campla/appid',
+            get_string('camplaappid', 'quizaccess_campla'),
+            get_string('camplaappid_desc', 'quizaccess_campla'),
+            '',
+            PARAM_RAW,
+        )
+    );
 }

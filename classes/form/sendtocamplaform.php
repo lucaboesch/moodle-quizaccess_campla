@@ -43,7 +43,6 @@ require_login();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class sendtocamplaform extends \core_form\dynamic_form {
-
     /**
      * Returns form context
      *
@@ -61,8 +60,8 @@ class sendtocamplaform extends \core_form\dynamic_form {
      *
      */
     protected function check_access_for_dynamic_submission(): void {
-        global $COURSE;
-        $context = \context_course::instance($COURSE->id);
+        $cmid = isset($this->_ajaxformdata['cmid']) ? (int) $this->_ajaxformdata['cmid'] : 0;
+        $context = \context_module::instance($cmid);
         require_capability('quizaccess/campla:canusecampla', $context);
     }
 
@@ -132,6 +131,10 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $mform->setType('coursename', PARAM_NOTAGS);
         $mform->addRule('coursename', get_string('required'), 'required', null, 'client');
 
+        $mform->addElement('text', 'quizowner', get_string('quizowner', 'quizaccess_campla'));
+        $mform->setType('quizowner', PARAM_NOTAGS);
+        $mform->addRule('quizowner', get_string('required'), 'required', null, 'client');
+
         $mform->addElement('text', 'quizurl', get_string('quizurl', 'quizaccess_campla'));
         $mform->setType('quizurl', PARAM_URL);
 
@@ -162,18 +165,23 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $cmid = isset($this->_ajaxformdata['cmid']) ? (int) $this->_ajaxformdata['cmid'] : 0;
         $quizname = \quizaccess_campla\settings_provider::get_campla_quizname($cmid);
         $coursename = \quizaccess_campla\settings_provider::get_campla_coursename($cmid);
+        $quizowner = \quizaccess_campla\settings_provider::get_campla_quizowner();
         $quizurl = new \moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
         if (\quizaccess_campla\settings_provider::get_campla_timeopen($cmid) !== 0) {
-            $quizopens = \core_date::strftime(get_string('strftimerecentfull', 'langconfig'),
-                \quizaccess_campla\settings_provider::get_campla_timeopen($cmid));
+            $quizopens = \core_date::strftime(
+                get_string('strftimerecentfull', 'langconfig'),
+                \quizaccess_campla\settings_provider::get_campla_timeopen($cmid)
+            );
             $quizopensunixtime = \quizaccess_campla\settings_provider::get_campla_timeopen($cmid);
         } else {
             $quizopens = get_string('na', 'quizaccess_campla');
             $quizopensunixtime = 0;
         }
         if (\quizaccess_campla\settings_provider::get_campla_timeclose($cmid) !== 0) {
-            $quizcloses = \core_date::strftime(get_string('strftimerecentfull', 'langconfig'),
-                \quizaccess_campla\settings_provider::get_campla_timeclose($cmid));
+            $quizcloses = \core_date::strftime(
+                get_string('strftimerecentfull', 'langconfig'),
+                \quizaccess_campla\settings_provider::get_campla_timeclose($cmid),
+            );
             $quizclosesunixtime = \quizaccess_campla\settings_provider::get_campla_timeclose($cmid);
         } else {
             $quizcloses = get_string('na', 'quizaccess_campla');
@@ -183,6 +191,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $this->set_data([
             'quizname' => $quizname,
             'coursename' => $coursename,
+            'quizowner' => $quizowner,
             'quizurl' => $quizurl,
             'quizstarturl' => $quizurl,
             'quizopens' => $quizopens,

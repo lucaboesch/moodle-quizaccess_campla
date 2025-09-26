@@ -33,7 +33,6 @@ use quizaccess_campla\settings_provider;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class quizaccess_campla extends access_rule_base {
-
     /**
      * Add any fields that this rule requires to the quiz settings form.
      *

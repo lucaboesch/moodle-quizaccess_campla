@@ -39,7 +39,6 @@ use function Symfony\Component\Translation\t;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class lib {
-
     /**
      * User Capabilities.
      *
@@ -82,8 +81,16 @@ class lib {
         $course = get_course($quiz->course);
         $coursecontext = \context_course::instance($course->id);
 
-        $studentids = get_enrolled_users($coursecontext, 'mod/quiz:attempt', 0, 'u.id,u.email',
-            'u.email', 0, 0, false);
+        $studentids = get_enrolled_users(
+            $coursecontext,
+            'mod/quiz:attempt',
+            0,
+            'u.id,u.email',
+            'u.email',
+            0,
+            0,
+            false,
+        );
 
         $students = [];
 
@@ -114,11 +121,11 @@ class lib {
         // Initiate cURL object with URL.
         $ch = curl_init($url);
 
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
 
         // Return response instead of printing.
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         // Send request.
         $result = curl_exec($ch);

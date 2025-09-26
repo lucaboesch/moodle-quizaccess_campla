@@ -25,7 +25,6 @@ namespace quizaccess_campla;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class settings_provider_test extends \advanced_testcase {
-
     /**
      * Mocked quiz form instance.
      * @var \mod_quiz_mod_form
@@ -135,8 +134,28 @@ final class settings_provider_test extends \advanced_testcase {
 
         $this->set_up_user_and_role();
 
-        $this->assertEquals(format_string($this->quiz->name, false, ['context' => $this->context]),
-            settings_provider::get_campla_quizname($this->quiz->cmid));
+        $this->assertEquals(
+            format_string($this->quiz->name, false, ['context' => $this->context]),
+            settings_provider::get_campla_quizname($this->quiz->cmid)
+        );
+    }
+
+    /**
+     * Test the return of the quiz name.
+     *
+     * @covers \quizaccess_campla\settings_provider::get_campla_quizowner
+     * @return void
+     */
+    public function test_get_campla_quizowner(): void {
+        $this->resetAfterTest();
+
+        $this->course = $this->getDataGenerator()->create_course();
+        $this->quiz = $this->getDataGenerator()->create_module('quiz', ['course' => $this->course->id]);
+        $this->context = \context_module::instance($this->quiz->cmid);
+
+        $this->set_up_user_and_role();
+
+        $this->assertEquals($this->user->email, settings_provider::get_campla_quizowner());
     }
 
     /**
@@ -154,8 +173,10 @@ final class settings_provider_test extends \advanced_testcase {
 
         $this->set_up_user_and_role();
 
-        $this->assertEquals(new \moodle_url('/mod/quiz/view.php', ['cmid' => $this->quiz->cmid]),
-            settings_provider::get_campla_quizurl($this->quiz->cmid));
+        $this->assertEquals(
+            new \moodle_url('/mod/quiz/view.php', ['cmid' => $this->quiz->cmid]),
+            settings_provider::get_campla_quizurl($this->quiz->cmid)
+        );
     }
 
     /**
@@ -209,8 +230,14 @@ final class settings_provider_test extends \advanced_testcase {
 
         $this->set_up_user_and_role();
 
-        $this->assertEquals(format_string($this->course->fullname, false, ['context' => $this->context]),
-            settings_provider::get_campla_coursename($this->quiz->cmid));
+        $this->assertEquals(
+            format_string(
+                $this->course->fullname,
+                false,
+                ['context' => $this->context]
+            ),
+            settings_provider::get_campla_coursename($this->quiz->cmid)
+        );
     }
 
 
@@ -232,7 +259,18 @@ final class settings_provider_test extends \advanced_testcase {
 
         $coursecontext = \context_course::instance($this->course->id);
 
-        $this->assertEquals(get_enrolled_users($coursecontext, 'mod/quiz:attempt', 0, 'u.*', null, 0, 0, true),
-            settings_provider::get_campla_coursestudents($this->quiz->cmid));
+        $this->assertEquals(
+            get_enrolled_users(
+                $coursecontext,
+                'mod/quiz:attempt',
+                0,
+                'u.*',
+                null,
+                0,
+                0,
+                true,
+            ),
+            settings_provider::get_campla_coursestudents($this->quiz->cmid)
+        );
     }
 }

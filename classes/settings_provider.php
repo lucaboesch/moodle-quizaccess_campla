@@ -36,7 +36,6 @@ require_once($CFG->dirroot . '/question/editlib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class settings_provider {
-
     /**
      * Insert form element.
      *
@@ -45,8 +44,12 @@ class settings_provider {
      * @param \HTML_QuickForm_element $element Element to insert.
      * @param string $before Insert element before.
      */
-    protected static function insert_element(\mod_quiz_mod_form $quizform,
-        \MoodleQuickForm $mform, \HTML_QuickForm_element $element, $before = 'security') {
+    protected static function insert_element(
+        \mod_quiz_mod_form $quizform,
+        \MoodleQuickForm $mform,
+        \HTML_QuickForm_element $element,
+        $before = 'security'
+    ) {
         $mform->insertElementBefore($element, $before);
     }
 
@@ -97,11 +100,14 @@ class settings_provider {
      * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
      */
     protected static function add_campla_button(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
-        $generatecamplabutton = \html_writer::tag('button', get_string('generatecamplaconfiguration', 'quizaccess_campla'),
+        $generatecamplabutton = \html_writer::tag(
+            'button',
+            get_string('generatecamplaconfiguration', 'quizaccess_campla'),
             ['class' => 'btn btn-secondary',
             'data-action' => 'opencamplasubmitquizform',
-            'onclick' => 'event.preventDefault();']
-            );
+            'onclick' => 'event.preventDefault();',
+                ]
+        );
         $element = $mform->createElement(
             'static',
             'static',
@@ -137,6 +143,16 @@ class settings_provider {
             return '';
         }
         return new \moodle_url('/mod/quiz/view.php', ['cmid' => $cmid]);
+    }
+
+    /**
+     * Returns the email address of the logged in user.
+     *
+     * @return string The email address of the logged in user.
+     */
+    public static function get_campla_quizowner(): string {
+        global $USER;
+        return $USER->email;
     }
 
     /**
