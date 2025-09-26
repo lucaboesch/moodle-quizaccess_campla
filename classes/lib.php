@@ -137,4 +137,25 @@ class lib {
 
         return true;
     }
+
+    /**
+     * Save AWT token.
+     *
+     * @param string $awttoken The AWT token.
+     */
+    public static function save_token($awttoken) {
+        set_config('awttoken', $awttoken, "quizaccess_campla");
+    }
+
+    /**
+     * Read AWT token.
+     *
+     * @return string
+     * @throws \dml_exception
+     */
+    public static function read_token(): string {
+        $awttoken = get_config('quizaccess_campla', 'awttoken') ?? "";
+        return $awttoken;
+    }
+
 }
