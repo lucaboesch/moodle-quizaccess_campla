@@ -15,30 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lib class for quizaccess_campla.
+ * Class for communicating with CAMPLA.
  *
  * @package    quizaccess_campla
  * @author     Luca Bösch <luca.boesch@bfh.ch>
- * @copyright  2024 BFH Bern University of Applied Sciences
+ * @copyright  2025 BFH Bern University of Applied Sciences
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace quizaccess_campla;
 
-use function Symfony\Component\Translation\t;
-
 /**
- * CAMPLA quiz access rule library code.
+ * Helper class for communicating with CAMPLA.
  *
- * Lib that contiains functions
- * for crud operations and some
- * other stuff
- *
- * @package    quizaccess_campla
- * @author     Luca Bösch <luca.boesch@bfh.ch>
+ * @copyright  2025 BFH Bern University of Applied Sciences
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class lib {
+class campla_client {
     /**
      * User Capabilities.
      *
@@ -47,17 +40,18 @@ class lib {
     public static $caps;
 
     /**
-     * Init function.
+     * Init the capabilities for the form.
      *
-     * should be called before using
-     * this class
-     *
-     * @return \stdClass on success.
+     * @param \stdClass $formdata The form data in a URI encoded param string
+     * @return void
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
-    public static function init() {
-        global $USER;
-        $context = \context_system::instance();
-        self::$caps['canusecampla'] = has_capability('quizaccess/campla:canusecampla', $context);
+    public static function init(\stdClass $formdata): void {
+        $context = \context_module::instance($formdata->cmid);
+        self::$caps = [
+            'canusecampla' => has_capability('quizaccess/campla:canusecampla', $context),
+        ];
     }
 
     /**
@@ -137,25 +131,4 @@ class lib {
 
         return true;
     }
-
-    /**
-     * Save AWT token.
-     *
-     * @param string $awttoken The AWT token.
-     */
-    public static function save_token($awttoken) {
-        set_config('awttoken', $awttoken, "quizaccess_campla");
-    }
-
-    /**
-     * Read AWT token.
-     *
-     * @return string
-     * @throws \dml_exception
-     */
-    public static function read_token(): string {
-        $awttoken = get_config('quizaccess_campla', 'awttoken') ?? "";
-        return $awttoken;
-    }
-
 }

@@ -26,6 +26,7 @@ namespace quizaccess_campla\form;
 
 defined('MOODLE_INTERNAL') || die;
 
+use quizaccess_campla\campla_client;
 use quizaccess_campla\lib;
 use quizaccess_campla\settings_provider;
 use function Symfony\Component\Translation\t;
@@ -86,8 +87,8 @@ class sendtocamplaform extends \core_form\dynamic_form {
      */
     public function process_dynamic_submission() {
         $formdata = $this->get_data();
-        lib::init();
-        $success = lib::sendtocampla($formdata);
+        campla_client::init($formdata);
+        $success = campla_client::sendtocampla($formdata);
 
         if ($success) {
             return [
