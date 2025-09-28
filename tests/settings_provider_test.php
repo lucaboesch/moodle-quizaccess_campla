@@ -182,7 +182,7 @@ final class settings_provider_test extends \advanced_testcase {
     /**
      * Test the return of the quiz start time.
      *
-     * @covers \quizaccess_campla\settings_provider::get_campla_timeopen
+     * @covers \quizaccess_campla\settings_provider::get_campla_timeopen_unixtime
      * @return void
      */
     public function test_get_campla_timeopen(): void {
@@ -194,13 +194,13 @@ final class settings_provider_test extends \advanced_testcase {
 
         $this->set_up_user_and_role();
 
-        $this->assertEquals($this->quiz->timeopen, settings_provider::get_campla_timeopen($this->quiz->cmid));
+        $this->assertEquals($this->quiz->timeopen, settings_provider::get_campla_timeopen_unixtime($this->quiz->cmid));
     }
 
     /**
      * Test the return of the quiz end time.
      *
-     * @covers \quizaccess_campla\settings_provider::get_campla_timeclose
+     * @covers \quizaccess_campla\settings_provider::get_campla_timeclose_unixtime
      * @return void
      */
     public function test_get_campla_timeclose(): void {
@@ -212,7 +212,7 @@ final class settings_provider_test extends \advanced_testcase {
 
         $this->set_up_user_and_role();
 
-        $this->assertEquals($this->quiz->timeclose, settings_provider::get_campla_timeclose($this->quiz->cmid));
+        $this->assertEquals($this->quiz->timeclose, settings_provider::get_campla_timeclose_unixtime($this->quiz->cmid));
     }
 
     /**

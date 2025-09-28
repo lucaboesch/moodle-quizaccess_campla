@@ -27,7 +27,6 @@ namespace quizaccess_campla\form;
 defined('MOODLE_INTERNAL') || die;
 
 use quizaccess_campla\campla_client;
-use quizaccess_campla\lib;
 use quizaccess_campla\settings_provider;
 use function Symfony\Component\Translation\t;
 
@@ -168,22 +167,24 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $coursename = \quizaccess_campla\settings_provider::get_campla_coursename($cmid);
         $quizowner = \quizaccess_campla\settings_provider::get_campla_quizowner();
         $quizurl = new \moodle_url('/mod/quiz/view.php', ['id' => $cmid]);
-        if (\quizaccess_campla\settings_provider::get_campla_timeopen($cmid) !== 0) {
+        if (\quizaccess_campla\settings_provider::get_campla_timeopen_unixtime($cmid) !== 0) {
             $quizopens = \core_date::strftime(
                 get_string('strftimerecentfull', 'langconfig'),
-                \quizaccess_campla\settings_provider::get_campla_timeopen($cmid)
+                \quizaccess_campla\settings_provider::get_campla_timeopen_unixtime($cmid)
             );
-            $quizopensunixtime = \quizaccess_campla\settings_provider::get_campla_timeopen($cmid);
+            $quizopensunixtime = \quizaccess_campla\settings_provider::get_campla_timeopen_unixtime($cmid);
+            $quizopensiso8601time = \quizaccess_campla\settings_provider::get_campla_timeopen_iso8601($cmid);
         } else {
             $quizopens = get_string('na', 'quizaccess_campla');
             $quizopensunixtime = 0;
         }
-        if (\quizaccess_campla\settings_provider::get_campla_timeclose($cmid) !== 0) {
+        if (\quizaccess_campla\settings_provider::get_campla_timeclose_unixtime($cmid) !== 0) {
             $quizcloses = \core_date::strftime(
                 get_string('strftimerecentfull', 'langconfig'),
-                \quizaccess_campla\settings_provider::get_campla_timeclose($cmid),
+                \quizaccess_campla\settings_provider::get_campla_timeclose_unixtime($cmid),
             );
-            $quizclosesunixtime = \quizaccess_campla\settings_provider::get_campla_timeclose($cmid);
+            $quizclosesunixtime = \quizaccess_campla\settings_provider::get_campla_timeclose_unixtime($cmid);
+            $quizclosesiso8601time = \quizaccess_campla\settings_provider::get_campla_timeclose_iso8601($cmid);
         } else {
             $quizcloses = get_string('na', 'quizaccess_campla');
             $quizclosesunixtime = 0;
