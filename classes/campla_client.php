@@ -75,6 +75,21 @@ class campla_client {
     }
 
     /**
+     * Converts a start time to ISO 8601 date/time.
+     *
+     * @param int $unixtime A time value in unix time.
+     * @return string The time value in ISO 8601 date/time.
+     */
+    public static function unixtimetoiso8601(int $unixtime): string {
+        if ($unixtime === 0) {
+            return 'N/A';
+        }
+        $dt = \DateTime::createFromFormat('U.u', sprintf('%.6f', $unixtime));
+        $dt->setTimezone(new \DateTimeZone('UTC'));
+        return $dt->format('Y-m-d\TH:i:s.v\Z');
+    }
+
+    /**
      * Send to CAMPLA.
      *
      * @param \stdClass $formdata The form data in a URI encoded param string
@@ -118,25 +133,36 @@ class campla_client {
             ];
         }
         $record = new \stdClass();
-        $record->quizname = $formdata->quizname;
-        $record->coursename = $formdata->coursename;
-        $record->quizurl = $formdata->quizstarturl;
-        $record->quizopens = $formdata->quizopensunixtime;
-        $record->quizcloses = $formdata->quizclosesunixtime;
-        $record->students = $formdata->students;
-        $record->submitteremail = $USER->email;
-        $record->created_at = time();
+
+        $examination = [];
+
+        $examination['id'] = $formdata->cmid;
+        $examination['name'] = $formdata->quizname;
+        $examination['startUrl'] = $formdata->quizstarturl;
+        $examination['start'] = self::unixtimetoiso8601($formdata->quizopensunixtime);
+        $examination['end'] = self::unixtimetoiso8601($formdata->quizclosesunixtime);
+        $examination['sebBrowserExamKey'] = '';
+        $examination['securityLevel'] = '';
+        $examination['quitPassword'] = '';
+
+        $module = [];
+        $module['name'] = $formdata->quizname;
+
+        $record->module = $module;
+        $record->examination = $examination;
+        $record->owner = $formdata->quizowner;
         $record->students = $students;
+        $record->createdAt = self::unixtimetoiso8601(time());
 
         // Sending the data to CAMPLA.
-        self::$url = settings_provider::read_camplabasisurl() . '/lms/examination';
+        self::$url = settings_provider::read_camplabasisurl() . '/lms/examination/';
         self::$secret = settings_provider::read_secret();
 
         // Initiate cURL object with URL.
         $ch = curl_init(self::$url);
 
         curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json', 'Authorization: Bearer ' . self::$secret]);
 
         // Return response instead of printing.
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

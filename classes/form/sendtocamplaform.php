@@ -119,62 +119,84 @@ class sendtocamplaform extends \core_form\dynamic_form {
 
         $url = settings_provider::read_camplabasisurl() . '/auth/application/';
 
-        // Initiate cURL object with URL.
-        $ch = curl_init($url);
+        $parts = parse_url($url);
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+        $hostvalid = true;
 
-        // Return response instead of printing.
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Send request.
-        $curlresult = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        if ($result === false) {
-            die(curl_error($ch));
-            return false;
+        if (!$parts || empty($parts['host'])) {
+            $hostvalid = false;
         }
-        curl_close($ch);
 
-        if ($httpcode === 200) {
-            $result = json_decode($curlresult, true);
-            if (!empty($result['token'])) {
-                if ($result['token'] !== \quizaccess_campla\token_manager::read_token()) {
-                    // The token is different, so we need to save the new one.
-                    \quizaccess_campla\token_manager::save_token($result['token']);
+        $host = $parts['host'];
+
+        // Quick DNS check.
+        if (!checkdnsrr($host, 'A') && !checkdnsrr($host, 'AAAA') && ($host !== 'localhost')) {
+            $hostvalid = false;
+        }
+
+        if ($hostvalid) {
+            // Initiate cURL object with URL.
+            $ch = curl_init($url);
+
+            curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+
+            // Return response instead of printing.
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Send request.
+            $curlresult = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($curlresult === false) {
+                die(curl_error($ch));
+                return false;
+            }
+            curl_close($ch);
+
+            if ($httpcode === 200) {
+                $result = json_decode($curlresult, true);
+                if (!empty($result['token'])) {
+                    if ($result['token'] !== \quizaccess_campla\token_manager::read_token()) {
+                        // The token is different, so we need to save the new one.
+                        \quizaccess_campla\token_manager::save_token($result['token']);
+                    }
+                    return [
+                        'status' => 200,
+                        'message' => get_string('tokenstored', 'quizaccess_campla'),
+                    ];
+                } else {
+                    return [
+                        'status' => 500,
+                        'message' => get_string('invalidtokenresponse', 'quizaccess_campla'),
+                    ];
                 }
+            }
+
+            if ($httpcode === 401) {
                 return [
-                    'status' => 200,
-                    'message' => get_string('tokenstored', 'quizaccess_campla'),
-                ];
-            } else {
-                return [
-                    'status' => 500,
-                    'message' => get_string('invalidtokenresponse', 'quizaccess_campla'),
+                    'status' => 401,
+                    'message' => 'The application is not authorized.',
                 ];
             }
-        }
 
-        if ($httpcode === 401) {
+            if ($httpcode === 412) {
+                return [
+                    'status' => 412,
+                    'message' => 'The login credentials does not meet the validation requirements.',
+                ];
+            }
+
             return [
-                'status' => 401,
-                'message' => 'The application is not authorized.',
+                'status' => 500,
+                'message' => 'CAMPLA server error.',
+            ];
+        } else {
+            return [
+                'status' => 500,
+                'message' => 'No valid CAMPLA URL configured.',
             ];
         }
-
-        if ($httpcode === 412) {
-            return [
-                'status' => 412,
-                'message' => 'The login credentials does not meet the validation requirements.',
-            ];
-        }
-
-        return [
-            'status' => 500,
-            'message' => 'CAMPLA server error.',
-        ];
     }
 
     /**
@@ -246,7 +268,6 @@ class sendtocamplaform extends \core_form\dynamic_form {
                 \quizaccess_campla\settings_provider::get_campla_timeopen_unixtime($cmid)
             );
             $quizopensunixtime = \quizaccess_campla\settings_provider::get_campla_timeopen_unixtime($cmid);
-            $quizopensiso8601time = \quizaccess_campla\settings_provider::get_campla_timeopen_iso8601($cmid);
         } else {
             $quizopens = get_string('na', 'quizaccess_campla');
             $quizopensunixtime = 0;
@@ -257,7 +278,6 @@ class sendtocamplaform extends \core_form\dynamic_form {
                 \quizaccess_campla\settings_provider::get_campla_timeclose_unixtime($cmid),
             );
             $quizclosesunixtime = \quizaccess_campla\settings_provider::get_campla_timeclose_unixtime($cmid);
-            $quizclosesiso8601time = \quizaccess_campla\settings_provider::get_campla_timeclose_iso8601($cmid);
         } else {
             $quizcloses = get_string('na', 'quizaccess_campla');
             $quizclosesunixtime = 0;
