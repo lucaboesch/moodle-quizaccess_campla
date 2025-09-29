@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for the quizaccess_campla plugin.
+ * CAMPLA quiz access rule web service functions.
  *
  * @package    quizaccess_campla
  * @author     Luca Bösch <luca.boesch@bfh.ch>
@@ -25,8 +25,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->release = 'v4.4-r1';
-$plugin->version = 2025092900;
-$plugin->requires = 2024042200;
-$plugin->component = 'quizaccess_campla';
-$plugin->maturity = MATURITY_ALPHA;
+$functions = [
+    'quizaccess_campla_handle_jwttoken_request' => [
+        'classname'    => 'quizaccess_campla\external\campla',
+        'methodname'   => 'handle_jwttoken_request',
+        'description'  => 'Fetch and store the CAMPLA JWT token.',
+        'type'         => 'write',
+        'capabilities' => 'quizaccess/campla:canusecampla',
+        'ajax'         => true,
+    ],
+];

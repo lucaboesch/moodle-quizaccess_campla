@@ -39,7 +39,7 @@ if ($hassiteconfig) {
 
     $settings->add(
         new admin_setting_configtext(
-            'quizaccess_campla/camplabasisurl',
+            'quizaccess_campla/basisurl',
             get_string('camplabasisurl', 'quizaccess_campla'),
             get_string('camplabasisurl_desc', 'quizaccess_campla'),
             '',

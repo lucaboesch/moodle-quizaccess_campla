@@ -40,6 +40,26 @@ class campla_client {
     public static $caps;
 
     /**
+     * CAMPLA Secret.
+     *
+     * @var string
+     */
+    public static $secret;
+
+    /**
+     * CAMPLA basis URL.
+     *
+     * @var string
+     */
+    public static $url;
+
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+    }
+
+    /**
      * Init the capabilities for the form.
      *
      * @param \stdClass $formdata The form data in a URI encoded param string
@@ -109,11 +129,11 @@ class campla_client {
         $record->students = $students;
 
         // Sending the data to CAMPLA.
-        $url = get_config('quizaccess_campla', 'camplabasisurl');
-        $secret = get_config('quizaccess_campla', 'secret');
+        self::$url = settings_provider::read_camplabasisurl() . '/lms/examination';
+        self::$secret = settings_provider::read_secret();
 
         // Initiate cURL object with URL.
-        $ch = curl_init($url);
+        $ch = curl_init(self::$url);
 
         curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);

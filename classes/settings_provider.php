@@ -170,6 +170,39 @@ class settings_provider {
     }
 
     /**
+     * Read CAMPLA secret.
+     *
+     * @return string
+     * @throws \dml_exception
+     */
+    public static function read_secret(): string {
+        $secret = get_config('quizaccess_campla', 'secret') ?? "";
+        return $secret;
+    }
+
+    /**
+     * Read CAMPLA basis URL.
+     *
+     * @return string
+     * @throws \dml_exception
+     */
+    public static function read_camplabasisurl(): string {
+        $secret = get_config('quizaccess_campla', 'basisurl') ?? "";
+        return $secret;
+    }
+
+    /**
+     * Read CAMPLA application ID.
+     *
+     * @return string
+     * @throws \dml_exception
+     */
+    public static function read_camplaappid(): string {
+        $secret = get_config('quizaccess_campla', 'appid') ?? "";
+        return $secret;
+    }
+
+    /**
      * Returns the quiz start time in ISO 8601 date/time.
      *
      * @param int $cmid The course module ID.

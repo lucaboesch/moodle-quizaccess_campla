@@ -28,6 +28,6 @@
  * @return bool
  */
 function xmldb_quizaccess_campla_install() {
-    set_config('awttoken', '', 'quizaccess_campla');
+    set_config('jwttoken', '', 'quizaccess_campla');
     return true;
 }

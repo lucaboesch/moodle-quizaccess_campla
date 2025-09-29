@@ -26,9 +26,9 @@ namespace quizaccess_campla\form;
 
 defined('MOODLE_INTERNAL') || die;
 
+use core_reportbuilder\external\filters\set;
 use quizaccess_campla\campla_client;
 use quizaccess_campla\settings_provider;
-use function Symfony\Component\Translation\t;
 
 require_once(__DIR__ . '/../../../../../../config.php');
 require_once($CFG->libdir . '/filelib.php');
@@ -52,7 +52,9 @@ class sendtocamplaform extends \core_form\dynamic_form {
      * @return \context
      */
     protected function get_context_for_dynamic_submission(): \context {
-        return \context_system::instance();
+        $cmid = isset($this->_ajaxformdata['cmid']) ? (int) $this->_ajaxformdata['cmid'] : 0;
+        $context = \context_module::instance($cmid);
+        return $context;
     }
 
     /**
@@ -82,9 +84,9 @@ class sendtocamplaform extends \core_form\dynamic_form {
      *
      * Submission data can be accessed as: $this->get_data()
      *
-     * @return ['status' => int, 'message'=> string]
+     * @return array ['status' => int, 'message'=> string]
      */
-    public function process_dynamic_submission() {
+    public function process_dynamic_submission(): array {
         $formdata = $this->get_data();
         campla_client::init($formdata);
         $success = campla_client::sendtocampla($formdata);
@@ -101,11 +103,84 @@ class sendtocamplaform extends \core_form\dynamic_form {
         ];
     }
 
+    /**
+     * Handles the external AJAX call to fetch and store the jwt token before form submission.
+     *
+     * This is called from JS when the modal opens.
+     *
+     * @return array
+     */
+    public static function handle_jwttoken_request(): array {
+        global $PAGE;
+
+        $record = new \stdClass();
+        $record->applicationId = settings_provider::read_camplaappid();
+        $record->secret = settings_provider::read_secret();
+
+        $url = settings_provider::read_camplabasisurl() . '/auth/application/';
+
+        // Initiate cURL object with URL.
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+
+        // Return response instead of printing.
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Send request.
+        $curlresult = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($result === false) {
+            die(curl_error($ch));
+            return false;
+        }
+        curl_close($ch);
+
+        if ($httpcode === 200) {
+            $result = json_decode($curlresult, true);
+            if (!empty($result['token'])) {
+                if ($result['token'] !== \quizaccess_campla\token_manager::read_token()) {
+                    // The token is different, so we need to save the new one.
+                    \quizaccess_campla\token_manager::save_token($result['token']);
+                }
+                return [
+                    'status' => 200,
+                    'message' => get_string('tokenstored', 'quizaccess_campla'),
+                ];
+            } else {
+                return [
+                    'status' => 500,
+                    'message' => get_string('invalidtokenresponse', 'quizaccess_campla'),
+                ];
+            }
+        }
+
+        if ($httpcode === 401) {
+            return [
+                'status' => 401,
+                'message' => 'The application is not authorized.',
+            ];
+        }
+
+        if ($httpcode === 412) {
+            return [
+                'status' => 412,
+                'message' => 'The login credentials does not meet the validation requirements.',
+            ];
+        }
+
+        return [
+            'status' => 500,
+            'message' => 'CAMPLA server error.',
+        ];
+    }
 
     /**
      * Returns url to set in $PAGE->set_url() when form is being rendered or submitted via AJAX
      *
-     * This is used in the form elements sensitive to the page url, such as Atto autosave in 'editor'
+     * This is used in the form elements sensitive to the page url.
      *
      * @return \moodle_url
      */
@@ -119,8 +194,6 @@ class sendtocamplaform extends \core_form\dynamic_form {
      * @return void
      */
     public function definition() {
-        $this->_ajaxformdata['cmid'];
-        global $CFG, $USER;
         $mform = $this->_form;
 
         $mform->addElement('text', 'quizname', get_string('quizname', 'quizaccess_campla'));

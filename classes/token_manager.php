@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class for managing the AWT token.
+ * Class for managing the JWT token.
  *
  * @package    quizaccess_campla
  * @author     Luca Bösch <luca.boesch@bfh.ch>
@@ -26,29 +26,29 @@
 namespace quizaccess_campla;
 
 /**
- * Helper class for managing the AWT token.
+ * Helper class for managing the JWT token.
  *
  * @copyright  2025 BFH Bern University of Applied Sciences
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class token_manager {
     /**
-     * Save AWT token.
+     * Save JWT token.
      *
-     * @param string $awttoken The AWT token.
+     * @param string $jwttoken The JWT token.
      */
-    public static function save_token($awttoken) {
-        set_config('awttoken', $awttoken, "quizaccess_campla");
+    public static function save_token($jwttoken) {
+        set_config('jwttoken', $jwttoken, "quizaccess_campla");
     }
 
     /**
-     * Read AWT token.
+     * Read JWT token.
      *
      * @return string
      * @throws \dml_exception
      */
     public static function read_token(): string {
-        $awttoken = get_config('quizaccess_campla', 'awttoken') ?? "";
-        return $awttoken;
+        $jwttoken = get_config('quizaccess_campla', 'jwttoken') ?? "";
+        return $jwttoken;
     }
 }
