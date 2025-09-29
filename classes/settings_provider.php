@@ -203,22 +203,6 @@ class settings_provider {
     }
 
     /**
-     * Returns the quiz start time in ISO 8601 date/time.
-     *
-     * @param int $cmid The course module ID.
-     * @return string The quiz timeopen value in ISO 8601 date/time.
-     */
-    public static function get_campla_timeopen_iso8601(int $cmid): string {
-        if ($cmid === 0) {
-            return 'N/A';
-        }
-        [$quiz, ] = get_module_from_cmid($cmid);
-        $dt = \DateTime::createFromFormat('U.u', sprintf('%.6f', $quiz->timeopen));
-        $dt->setTimezone(new \DateTimeZone('UTC'));
-        return $dt->format('Y-m-d\TH:i:s.v\Z');
-    }
-
-    /**
      * Returns the quiz end time in unixtime.
      *
      * @param int $cmid The course module ID.
@@ -230,22 +214,6 @@ class settings_provider {
         }
         [$quiz, ] = get_module_from_cmid($cmid);
         return $quiz->timeclose;
-    }
-
-    /**
-     * Returns the quiz end time in ISO 8601 date/time.
-     *
-     * @param int $cmid The course module ID.
-     * @return string The quiz timeclose value in ISO 8601 date/time.
-     */
-    public static function get_campla_timeclose_iso8601(int $cmid): string {
-        if ($cmid === 0) {
-            return 'N/A';
-        }
-        [$quiz, ] = get_module_from_cmid($cmid);
-        $dt = \DateTime::createFromFormat('U.u', sprintf('%.6f', $quiz->timeclose));
-        $dt->setTimezone(new \DateTimeZone('UTC'));
-        return $dt->format('Y-m-d\TH:i:s.v\Z');
     }
 
     /**

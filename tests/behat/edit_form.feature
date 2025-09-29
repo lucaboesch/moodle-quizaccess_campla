@@ -14,6 +14,10 @@ Feature: CAMPLA button in quiz edit form
     And the following "course enrolments" exist:
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
+    And the following config values are set as admin:
+      | basisurl | https://campla.moodle.org            | quizaccess_campla |
+      | secret   | 1UmPYTe3Th1_95                       | quizaccess_campla |
+      | appid    | 6a6f9d8f-dc8c-4fb2-ad60-ecf7acf7ef7f | quizaccess_campla |
 
   Scenario: Quiz setting "CAMPLA" features a "Generate CAMPLA configuration" button.
     Given the following "activities" exist:
@@ -50,5 +54,5 @@ Feature: CAMPLA button in quiz edit form
     And the field "Quiz closes" matches value "<timeclose>%a, %d %b %Y, %I:%M %p##"
 
     Examples:
-      | timeopen      | timeclose    |
-      | ##yesterday## | ##tomorrow## |
+      | timeopen              | timeclose             |
+      | ##31 Dec 2024 12:00## | ##31 Dec 2040 12:00## |
