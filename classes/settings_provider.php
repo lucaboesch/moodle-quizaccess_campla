@@ -25,6 +25,8 @@
 
 namespace quizaccess_campla;
 
+use core_plugin_manager;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/question/editlib.php');
@@ -167,6 +169,26 @@ class settings_provider {
         }
         [$quiz, ] = get_module_from_cmid($cmid);
         return $quiz->timeopen;
+    }
+
+
+    /**
+     * Returns the quiz quit password.
+     *
+     * @param int $cmid The course module ID.
+     * @return string The quiz quit password.
+     */
+    public static function get_campla_quizquizpassword(int $cmid): string {
+        global $DB;
+        if ($cmid === 0) {
+            return '';
+        }
+        $installedplugins = core_plugin_manager::instance()->get_installed_plugins('quizaccess');
+        if (!(isset($installedplugins['seb']))) {
+            // SEB quizaccess plugin could be disabled or not installed.
+            return '';
+        }
+        return $DB->get_field_sql('SELECT quitpassword FROM {quizaccess_seb_quizsettings} WHERE cmid = ?', [$cmid]);
     }
 
     /**
