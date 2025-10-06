@@ -127,8 +127,17 @@ class sendtocamplaform extends \core_form\dynamic_form {
         }
 
         $host = $parts['host'];
+        if ($host !== 'localhost') {
 
-        // TODO Validate if the host can be reached.
+            $records = dns_get_record($host, DNS_A + DNS_AAAA);
+
+            if ($records === false || empty($records)) {
+                $hostvalid = false;
+            } else {
+                $hostvalid = true;
+            }
+
+        }
 
         // Allow localhost. For testing purposes only.
         if ($host === 'localhost') {
