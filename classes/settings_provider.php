@@ -192,6 +192,25 @@ class settings_provider {
     }
 
     /**
+     * Returns the quiz browser exam keys.
+     *
+     * @param int $cmid The course module ID.
+     * @return string The quiz browser exam keys.
+     */
+    public static function get_campla_quizallowedbrowserexamkeys(int $cmid): string {
+        global $DB;
+        if ($cmid === 0) {
+            return '';
+        }
+        $installedplugins = core_plugin_manager::instance()->get_installed_plugins('quizaccess');
+        if (!(isset($installedplugins['seb']))) {
+            // SEB quizaccess plugin could be disabled or not installed.
+            return '';
+        }
+        return $DB->get_field_sql('SELECT allowedbrowserexamkeys FROM {quizaccess_seb_quizsettings} WHERE cmid = ?', [$cmid]) ?? '';
+    }
+
+    /**
      * Read CAMPLA secret.
      *
      * @return string
