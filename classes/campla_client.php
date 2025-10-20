@@ -162,7 +162,8 @@ class campla_client {
         $ch = curl_init(self::$url);
 
         curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json', 'Authorization: Bearer ' . self::$secret]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json', 'Authorization: Bearer ' .
+            token_manager::read_token()]);
 
         // Return response instead of printing.
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
