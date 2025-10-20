@@ -128,7 +128,6 @@ class sendtocamplaform extends \core_form\dynamic_form {
 
         $host = $parts['host'];
         if ($host !== 'localhost') {
-
             $records = dns_get_record($host, DNS_A + DNS_AAAA);
 
             if ($records === false || empty($records)) {
@@ -136,7 +135,6 @@ class sendtocamplaform extends \core_form\dynamic_form {
             } else {
                 $hostvalid = true;
             }
-
         }
 
         // Allow localhost. For testing purposes only.
