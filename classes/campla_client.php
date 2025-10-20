@@ -146,7 +146,11 @@ class campla_client {
         $examination['quitPassword'] = settings_provider::get_campla_quizquizpassword($formdata->cmid);
 
         $module = [];
-        $module['name'] = $formdata->quizname;
+        $module['name'] = format_string(
+            $course->name,
+            true,
+            ['context' => $coursecontext]
+        );
 
         $record->module = $module;
         $record->examination = $examination;
