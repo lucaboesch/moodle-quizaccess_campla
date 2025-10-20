@@ -247,6 +247,19 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $mform->addElement('text', 'quizcloses', get_string('quizcloses', 'mod_quiz'));
         $mform->setType('quizcloses', PARAM_NOTAGS);
 
+        $securityleveloptions = [
+            '1' => get_string('securitylevellernstick', 'quizaccess_campla'),
+            '5' => get_string('securitylevelseb', 'quizaccess_campla'),
+        ];
+        $mform->addElement(
+            'select',
+            'securitylevel',
+            get_string('securitylevel', 'quizaccess_campla'),
+            $securityleveloptions,
+        );
+        $mform->setType('securitylevel', PARAM_NOTAGS);
+        $mform->addRule('securitylevel', get_string('required'), 'required', null, 'client');
+
         $mform->addElement('hidden', 'quizstarturl');
         $mform->setType('quizstarturl', PARAM_URL);
 
@@ -291,6 +304,8 @@ class sendtocamplaform extends \core_form\dynamic_form {
             $quizclosesunixtime = 0;
         }
 
+        $securitylevel = get_config('quizaccess_campla', 'securitylevel') ?? 5;
+
         $this->set_data([
             'quizname' => $quizname,
             'coursename' => $coursename,
@@ -301,6 +316,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
             'quizcloses' => $quizcloses,
             'quizopensunixtime' => $quizopensunixtime,
             'quizclosesunixtime' => $quizclosesunixtime,
+            'securitylevel' => $securitylevel,
             'cmid' => $cmid,
             'hidebuttons' => $this->optional_param('hidebuttons', false, PARAM_BOOL),
         ]);

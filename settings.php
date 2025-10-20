@@ -66,4 +66,17 @@ if ($hassiteconfig) {
             PARAM_RAW,
         )
     );
+
+    $settings->add(
+        new admin_setting_configselect(
+            'quizaccess_campla/securitylevel',
+            get_string('camplasecuritylevel', 'quizaccess_campla'),
+            get_string('camplasecuritylevel_desc', 'quizaccess_campla'),
+            5,
+            [
+                '1' => get_string('securitylevellernstick', 'quizaccess_campla'),
+                '5' => get_string('securitylevelseb', 'quizaccess_campla'),
+            ]
+        )
+    );
 }
