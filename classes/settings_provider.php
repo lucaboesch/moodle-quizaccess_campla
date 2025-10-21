@@ -178,7 +178,7 @@ class settings_provider {
      * @param int $cmid The course module ID.
      * @return string The quiz quit password.
      */
-    public static function get_campla_quizquizpassword(int $cmid): string {
+    public static function get_campla_quizquitpassword(int $cmid): string {
         global $DB;
         if ($cmid === 0) {
             return '';
