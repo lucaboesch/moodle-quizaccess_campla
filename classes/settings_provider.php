@@ -188,17 +188,19 @@ class settings_provider {
             // SEB quizaccess plugin could be disabled or not installed.
             return '';
         }
-        return $DB->get_field_sql('SELECT quitpassword FROM {quizaccess_seb_quizsettings} WHERE cmid = ?', [$cmid]);
+        return $DB->get_field_sql('SELECT quitpassword FROM {quizaccess_seb_quizsettings} WHERE cmid = ?', [$cmid]) ?? '';
     }
 
     /**
-     * Returns the quiz browser exam keys.
+     * Returns the quiz browser exam key for CAMPLA.
+     * That is, only the first allowed browser exam key.
      *
      * @param int $cmid The course module ID.
      * @return string The quiz browser exam keys.
      */
-    public static function get_campla_quizallowedbrowserexamkeys(int $cmid): string {
-        global $DB;
+    public static function get_campla_quizallowedbrowserexamkey(int $cmid): string {
+        global $DB, $USER;
+        $allowedbrowserexamkey = '';
         if ($cmid === 0) {
             return '';
         }
@@ -207,7 +209,32 @@ class settings_provider {
             // SEB quizaccess plugin could be disabled or not installed.
             return '';
         }
-        return $DB->get_field_sql('SELECT allowedbrowserexamkeys FROM {quizaccess_seb_quizsettings} WHERE cmid = ?', [$cmid]) ?? '';
+        $allowdbrowserexamkeydbfield = $DB->get_field_sql('SELECT allowedbrowserexamkeys FROM {quizaccess_seb_quizsettings} ' .
+            'WHERE cmid = ?', [$cmid]);
+        // Check whether there are allowed browser exam keys set.
+        if (!empty($allowdbrowserexamkeydbfield)) {
+            // There are, return the first one if there are multiple ones.
+            $allowedbrowserexamkeysarray = self::split_keys($allowdbrowserexamkeydbfield);
+            $allowedbrowserexamkey = $allowedbrowserexamkeysarray[0];
+        } else {
+            // If no, generate settings and exam keys, and retrieve the key.
+            $randombytes = random_bytes(32);
+            $newallowedbrowserexamkey = hash('sha256', $randombytes);
+            [$quiz, ] = get_module_from_cmid($cmid);
+            $sebquizsettings = \quizaccess_seb\seb_quiz_settings::get_by_quiz_id($quiz->id);
+            if (!$sebquizsettings) {
+                $sebquizsettings = new \quizaccess_seb\seb_quiz_settings();
+                $sebquizsettings->set('cmid', $cmid);
+                $sebquizsettings->set('quizid', $quiz->id);
+            }
+            $sebquizsettings->set('requiresafeexambrowser', \quizaccess_seb\settings_provider::USE_SEB_CLIENT_CONFIG);
+            $sebquizsettings->set('showsebdownloadlink', 0);
+            $sebquizsettings->set('allowedbrowserexamkeys', $newallowedbrowserexamkey);
+            $sebquizsettings->save();
+
+            $allowedbrowserexamkey = $newallowedbrowserexamkey;
+        }
+        return $allowedbrowserexamkey;
     }
 
     /**
@@ -295,5 +322,19 @@ class settings_provider {
      */
     public static function can_configure_campla(\context $context): bool {
         return has_capability('quizaccess/campla:canusecampla', $context);
+    }
+
+    /**
+     * This helper method takes list of browser exam keys in a string and splits it into an array of separate keys.
+     *
+     * @param string|null $keys the allowed keys.
+     * @return array of string, the separate keys.
+     */
+    private static function split_keys($keys): array {
+        $keys = preg_split('~[ \t\n\r,;]+~', $keys ?? '', -1, PREG_SPLIT_NO_EMPTY);
+        foreach ($keys as $i => $key) {
+            $keys[$i] = strtolower($key);
+        }
+        return $keys;
     }
 }
