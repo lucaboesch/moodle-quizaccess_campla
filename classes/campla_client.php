@@ -136,13 +136,13 @@ class campla_client {
 
         $examination = [];
 
-        $examination['id'] = $formdata->cmid;
+        $examination['id'] = (string) $formdata->cmid;
         $examination['name'] = $formdata->quizname;
         $examination['startUrl'] = $formdata->quizstarturl;
         $examination['start'] = self::unixtimetoiso8601($formdata->quizopensunixtime);
         $examination['end'] = self::unixtimetoiso8601($formdata->quizclosesunixtime);
         $examination['sebBrowserExamKey'] = settings_provider::get_campla_quizallowedbrowserexamkey($formdata->cmid);
-        $examination['securityLevel'] = $formdata->securitylevel;
+        $examination['securityLevel'] = (int) $formdata->securitylevel;
         $examination['quitPassword'] = settings_provider::get_campla_quizquitpassword($formdata->cmid);
 
         $module = [];
