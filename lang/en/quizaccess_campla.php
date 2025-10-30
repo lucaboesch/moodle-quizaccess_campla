@@ -41,6 +41,7 @@ $string['invalidtokenresponse'] = 'Invalid response from JWT token request.';
 $string['na'] = 'N/A';
 $string['pluginname'] = 'CAMPLA exam configuration';
 $string['privacy:metadata'] = 'The CAMPLA quiz access plugin does not store any personal data.';
+$string['quitpassword'] = 'Quit password';
 $string['quizname'] = 'Quiz name';
 $string['quizowner'] = 'Quiz owner';
 $string['quizurl'] = 'Quiz URL';

@@ -247,6 +247,9 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $mform->addElement('text', 'quizcloses', get_string('quizcloses', 'mod_quiz'));
         $mform->setType('quizcloses', PARAM_NOTAGS);
 
+        $mform->addElement('text', 'quitpassword', get_string('quitpassword', 'quizaccess_campla'));
+        $mform->setType('quitpassword', PARAM_NOTAGS);
+
         $securityleveloptions = [
             '1' => get_string('securitylevellernstick', 'quizaccess_campla'),
             '5' => get_string('securitylevelseb', 'quizaccess_campla'),
@@ -272,7 +275,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $mform->addElement('hidden', 'cmid');
         $mform->setType('cmid', PARAM_INT);
 
-        $mform->freeze(['quizurl', 'quizopens', 'quizcloses']);
+        $mform->freeze(['quizurl', 'quizopens', 'quizcloses', 'quitpassword']);
 
         if (empty($this->_ajaxformdata['hidebuttons'])) {
             $this->add_action_buttons(true, get_string('submitlabel', 'quizaccess_campla'));
@@ -304,6 +307,8 @@ class sendtocamplaform extends \core_form\dynamic_form {
             $quizclosesunixtime = 0;
         }
 
+        $quitpassword = \quizaccess_campla\settings_provider::get_campla_quizquitpassword($cmid);
+
         $securitylevel = get_config('quizaccess_campla', 'securitylevel') ?? 5;
 
         $this->set_data([
@@ -316,6 +321,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
             'quizcloses' => $quizcloses,
             'quizopensunixtime' => $quizopensunixtime,
             'quizclosesunixtime' => $quizclosesunixtime,
+            'quitpassword' => $quitpassword,
             'securitylevel' => $securitylevel,
             'cmid' => $cmid,
             'hidebuttons' => $this->optional_param('hidebuttons', false, PARAM_BOOL),

@@ -181,14 +181,22 @@ class settings_provider {
     public static function get_campla_quizquitpassword(int $cmid): string {
         global $DB;
         if ($cmid === 0) {
-            return '';
+            return 'Invalid – no correct cmid provided.';
         }
         $installedplugins = core_plugin_manager::instance()->get_installed_plugins('quizaccess');
         if (!(isset($installedplugins['seb']))) {
             // SEB quizaccess plugin could be disabled or not installed.
-            return '';
+            return self::generatepassword();
         }
-        return $DB->get_field_sql('SELECT quitpassword FROM {quizaccess_seb_quizsettings} WHERE cmid = ?', [$cmid]) ?? '';
+        $actualpassword = $DB->get_field_sql(
+            'SELECT quitpassword FROM {quizaccess_seb_quizsettings} WHERE cmid = ?',
+            [$cmid],
+        );
+        if ($actualpassword === '') {
+            return self::generatepassword();
+        } else {
+            return $actualpassword;
+        }
     }
 
     /**
@@ -336,5 +344,22 @@ class settings_provider {
             $keys[$i] = strtolower($key);
         }
         return $keys;
+    }
+
+    /**
+     * This helper method generates a 8 character password without ambiguous characters that could be mistaken.
+     *
+     * @return string, a 8 character password without ambiguous lI1O0.
+     */
+    private static function generatepassword(): string {
+        $password = '';
+        $characters = '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        $maxindex = strlen($characters) - 1;
+
+        for ($i = 0; $i < 8; $i++) {
+            $password .= $characters[random_int(0, $maxindex)];
+        }
+
+        return $password;
     }
 }
