@@ -136,7 +136,7 @@ class campla_client {
 
         $examination = [];
 
-        $examination['id'] = $formdata->cmid;
+        $examination['id'] = (string) $formdata->cmid;
         $examination['name'] = $formdata->quizname;
         $examination['startUrl'] = $formdata->quizstarturl;
         $examination['start'] = self::unixtimetoiso8601($formdata->quizopensunixtime);
