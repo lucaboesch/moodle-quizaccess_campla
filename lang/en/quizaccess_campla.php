@@ -36,6 +36,11 @@ $string['camplasecret_desc'] = 'The Application secret CAMPLA uses to identify t
 $string['camplasecuritylevel'] = 'CAMPLA default security level';
 $string['camplasecuritylevel_desc'] = 'The security level that should be default when sending an exam to CAMPLA.';
 $string['coursename'] = 'Course name';
+$string['generatebuttoninfo'] = 'The "Generate CAMPLA configuration" button is only active if there are a saved quiz start time
+("Open the quiz") and quiz end time ("Close the quiz"). Since this form does not entirely save via AJAX, saving must have happened
+beforehand.</p><p>Please set the following settings in the section "Timing":</p><ul><li>On "Open the quiz", enable the checkbox
+and set a time and date.</li><li>On "Close the quiz", enable the checkbox
+and set a time and date.</li></ul><p>Save the changes for them to take effect.</p>';
 $string['generatecamplaconfiguration'] = 'Generate CAMPLA configuration';
 $string['invalidtokenresponse'] = 'Invalid response from JWT token request.';
 $string['na'] = 'N/A';

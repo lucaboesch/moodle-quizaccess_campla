@@ -78,6 +78,7 @@ class settings_provider {
     public static function add_campla_settings_fields(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
         if (self::can_configure_campla($quizform->get_context())) {
             self::add_campla_header_element($quizform, $mform);
+            self::add_campla_helptext($quizform, $mform);
             self::add_campla_button($quizform, $mform);
         }
     }
@@ -89,8 +90,6 @@ class settings_provider {
      * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
      */
     protected static function add_campla_header_element(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
-        global  $OUTPUT;
-
         $element = $mform->createElement('header', 'campla', get_string('campla', 'quizaccess_campla'));
         self::insert_element($quizform, $mform, $element);
     }
@@ -102,14 +101,32 @@ class settings_provider {
      * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
      */
     protected static function add_campla_button(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
-        $generatecamplabutton = \html_writer::tag(
-            'button',
-            get_string('generatecamplaconfiguration', 'quizaccess_campla'),
-            ['class' => 'btn btn-secondary',
-            'data-action' => 'opencamplasubmitquizform',
-            'onclick' => 'event.preventDefault();',
+        $cmid = $quizform->get_context()->instanceid;
+        // Are the both starttime and enddtime set?
+        if (self::get_campla_timeopen_unixtime($cmid) === 0 || self::get_campla_timeclose_unixtime($cmid) === 0) {
+            // One or both values are not set, disable the button.
+            $generatecamplabutton = \html_writer::tag(
+                'button',
+                get_string('generatecamplaconfiguration', 'quizaccess_campla'),
+                [
+                    'class' => 'btn btn-secondary disabled',
+                    'data-action' => 'opencamplasubmitquizform',
+                    'onclick' => 'event.preventDefault();',
+                    'disabled' => 'true',
                 ]
-        );
+            );
+        } else {
+            // Both values are set, enable the button.
+            $generatecamplabutton = \html_writer::tag(
+                'button',
+                get_string('generatecamplaconfiguration', 'quizaccess_campla'),
+                [
+                    'class' => 'btn btn-secondary',
+                    'data-action' => 'opencamplasubmitquizform',
+                    'onclick' => 'event.preventDefault();',
+                ]
+            );
+        }
         $element = $mform->createElement(
             'static',
             'static',
@@ -117,6 +134,27 @@ class settings_provider {
             $generatecamplabutton,
         );
 
+        self::insert_element($quizform, $mform, $element);
+    }
+
+    /**
+     * Add "Generate CAMPLA configuration" button helptext.
+     *
+     * @param \mod_quiz_mod_form $quizform the quiz settings form that is being built.
+     * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     */
+    protected static function add_campla_helptext(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
+        $cmid = $quizform->get_context()->instanceid;
+        $boxcolor = 'alert-warning';
+        // Are the both starttime and enddtime set?
+        if (self::get_campla_timeopen_unixtime($cmid) === 0 || self::get_campla_timeclose_unixtime($cmid) === 0) {
+            $boxcolor = 'alert-danger';
+        }
+        $element = $mform->createElement(
+            'html',
+            '<div class="box generalbox alert ' . $boxcolor . '">' .
+            get_string('generatebuttoninfo', 'quizaccess_campla') . '</div>',
+        );
         self::insert_element($quizform, $mform, $element);
     }
 

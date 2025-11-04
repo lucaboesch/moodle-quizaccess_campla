@@ -58,3 +58,24 @@ Feature: CAMPLA button in quiz edit form
     Examples:
       | timeopen              | timeclose             |
       | ##31 Dec 2024 12:00## | ##31 Dec 2040 12:00## |
+
+  Scenario: The "Generate CAMPLA configuration" button should be enabled of disabled based on quiz timing.
+    Given the following "activities" exist:
+      | activity | course | section | name   |
+      | quiz     | C1     | 1       | Quiz 1 |
+    When I am on the "Quiz 1" "quiz activity editing" page logged in as admin
+    And I expand all fieldsets
+    And the "Generate CAMPLA configuration" "button" should be disabled
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | timeopen[enabled] | 1 |
+      | timeopen[day] | 1 |
+      | timeopen[month] | January |
+      | timeopen[year] | 2010 |
+      | timeclose[enabled] | 1 |
+      | timeclose[day] | 1 |
+      | timeclose[month] | January |
+      | timeclose[year] | 2040 |
+    And I press "Save and return to course"
+    And I am on the "Quiz 1" "quiz activity editing" page logged in as admin
+    Then the "Generate CAMPLA configuration" "button" should be enabled
