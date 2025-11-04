@@ -25,6 +25,7 @@
 
 namespace quizaccess_campla;
 
+use html_writer;
 use core_plugin_manager;
 
 defined('MOODLE_INTERNAL') || die;
@@ -80,6 +81,7 @@ class settings_provider {
             self::add_campla_header_element($quizform, $mform);
             self::add_campla_helptext($quizform, $mform);
             self::add_campla_button($quizform, $mform);
+            self::add_campla_examlink($quizform, $mform);
         }
     }
 
@@ -154,6 +156,32 @@ class settings_provider {
             'html',
             '<div class="box generalbox alert ' . $boxcolor . '">' .
             get_string('generatebuttoninfo', 'quizaccess_campla') . '</div>',
+        );
+        self::insert_element($quizform, $mform, $element);
+    }
+
+    /**
+     * Add CAMPLA exam link.
+     *
+     * @param \mod_quiz_mod_form $quizform the quiz settings form that is being built.
+     * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     */
+    protected static function add_campla_examlink(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
+        $cmid = $quizform->get_context()->instanceid;
+        $camplaurl = self::read_camplabasisurl() . '/examinations?lmsid='  . $cmid . '&appId=' . self::read_camplaappid();
+        $element = $mform->createElement(
+            'html',
+            '<p>' .
+            get_string(
+                'camplalink',
+                'quizaccess_campla',
+                html_writer::tag(
+                    'a',
+                    $camplaurl,
+                    ['href' => $camplaurl, 'target' => '_blank']
+                )
+            )
+            . '</p>',
         );
         self::insert_element($quizform, $mform, $element);
     }

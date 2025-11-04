@@ -116,7 +116,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $record->applicationId = settings_provider::read_camplaappid();
         $record->secret = settings_provider::read_secret();
 
-        $url = settings_provider::read_camplabasisurl() . '/auth/application/';
+        $url = settings_provider::read_camplabasisurl() . '/rest/auth/application/';
 
         $parts = parse_url($url);
 
