@@ -31,6 +31,7 @@ $string['camplaappid'] = 'CAMPLA Application ID';
 $string['camplaappid_desc'] = 'The Application ID CAMPLA uses to identify the Moodle instance.';
 $string['camplabasisurl'] = 'CAMPLA REST API URL';
 $string['camplabasisurl_desc'] = 'URL used to access the CAMPLA API (without trailing / slash).';
+$string['camplalink'] = 'After successful sending to CAMPLA and its exam creation, the exam can be accessed by the URL<br/>{$a}.';
 $string['camplasecret'] = 'CAMPLA Application secret';
 $string['camplasecret_desc'] = 'The Application secret CAMPLA uses to identify the Moodle instance.';
 $string['camplasecuritylevel'] = 'CAMPLA default security level';
