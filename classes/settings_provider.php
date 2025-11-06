@@ -258,7 +258,7 @@ class settings_provider {
             'SELECT quitpassword FROM {quizaccess_seb_quizsettings} WHERE cmid = ?',
             [$cmid],
         );
-        if ($actualpassword === '') {
+        if (!($actualpassword) || $actualpassword === '') {
             return self::generatepassword();
         } else {
             return $actualpassword;
