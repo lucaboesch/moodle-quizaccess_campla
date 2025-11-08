@@ -158,7 +158,7 @@ class campla_client {
         $record->createdAt = self::unixtimetoiso8601(time());
 
         // Sending the data to CAMPLA.
-        self::$url = settings_provider::read_camplabasisurl() . '/lms/examination/';
+        self::$url = settings_provider::read_camplabasisurl() . '/rest/lms/examination/';
         self::$secret = settings_provider::read_secret();
 
         // Initiate cURL object with URL.
