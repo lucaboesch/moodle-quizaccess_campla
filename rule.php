@@ -42,12 +42,9 @@ class quizaccess_campla extends access_rule_base {
     public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
         global $PAGE;
 
-        $cmid = $quizform->get_context()->instanceid;
-        $context = \context_module::instance($cmid);
-        $canusecampla = has_capability('quizaccess/campla:canusecampla', $context);
-
-        if ($canusecampla) {
+        if (settings_provider::can_configure_campla($quizform->get_context())) {
             settings_provider::add_campla_settings_fields($quizform, $mform);
+            $cmid = $quizform->get_context()->instanceid;
             $PAGE->requires->js_call_amd(
                 'quizaccess_campla/modalforms',
                 'modalForm',
