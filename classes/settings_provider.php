@@ -71,6 +71,20 @@ class settings_provider {
     }
 
     /**
+     * Add setting placeholder informative text for new quiz instance.
+     *
+     * @param \mod_quiz_mod_form $quizform the quiz settings form that is being built.
+     * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     * @return void
+     */
+    public static function add_campla_settings_placeholder(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
+        if (self::can_configure_campla($quizform->get_context())) {
+            self::add_campla_header_element($quizform, $mform);
+            self::add_campla_placeholdertext($quizform, $mform);
+        }
+    }
+
+    /**
      * Add setting fields.
      *
      * @param \mod_quiz_mod_form $quizform the quiz settings form that is being built.
@@ -156,6 +170,22 @@ class settings_provider {
             'html',
             '<div class="box generalbox alert ' . $boxcolor . '">' .
             get_string('generatebuttoninfo', 'quizaccess_campla') . '</div>',
+        );
+        self::insert_element($quizform, $mform, $element);
+    }
+
+    /**
+     * Add "Quiz instance is about to be created" helptext.
+     *
+     * @param \mod_quiz_mod_form $quizform the quiz settings form that is being built.
+     * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     */
+    protected static function add_campla_placeholdertext(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
+        // Are the both starttime and enddtime set?
+        $element = $mform->createElement(
+            'html',
+            '<div class="box generalbox alert alert-info">' .
+            get_string('newquizinstanceinfo', 'quizaccess_campla') . '</div>',
         );
         self::insert_element($quizform, $mform, $element);
     }
