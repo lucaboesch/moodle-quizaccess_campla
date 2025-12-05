@@ -45,6 +45,7 @@ and set a time and date.</li></ul><p>Save the changes for them to take effect.</
 $string['generatecamplaconfiguration'] = 'Generate CAMPLA configuration';
 $string['invalidtokenresponse'] = 'Invalid response from JWT token request.';
 $string['na'] = 'N/A';
+$string['newquizinstanceinfo'] = 'The settings in this section will be only visible once the quiz is created.';
 $string['pluginname'] = 'CAMPLA exam configuration';
 $string['privacy:metadata'] = 'The CAMPLA quiz access plugin does not store any personal data.';
 $string['quitpassword'] = 'Quit password';
