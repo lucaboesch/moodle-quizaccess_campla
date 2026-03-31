@@ -89,9 +89,9 @@ class sendtocamplaform extends \core_form\dynamic_form {
     public function process_dynamic_submission(): array {
         $formdata = $this->get_data();
         campla_client::init($formdata);
-        $success = campla_client::sendtocampla($formdata);
+        [$camplaresponse, $camplamessage] = campla_client::sendtocampla($formdata);
 
-        if ($success) {
+        if ($camplaresponse) {
             return [
                 'status' => 200,
                 'message' => get_string('sendtocamplasuccess', 'quizaccess_campla'),
@@ -99,7 +99,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
         }
         return [
             'status' => 500,
-            'message' => get_string('sendtocamplafail', 'quizaccess_campla'),
+            'message' => get_string('sendtocamplafail', 'quizaccess_campla') . '<br />' . $camplamessage,
         ];
     }
 
@@ -171,7 +171,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
                     }
                     return [
                         'status' => 200,
-                        'message' => get_string('tokenstored', 'quizaccess_campla'),
+                        'message' => get_string('tokenstored', 'quizaccess_campla') . $result['token'],
                     ];
                 } else {
                     return [

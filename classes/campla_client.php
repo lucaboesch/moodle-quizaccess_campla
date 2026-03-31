@@ -173,12 +173,12 @@ class campla_client {
 
         // Send request.
         $result = curl_exec($ch);
-        if ($result === false) {
-            die(curl_error($ch));
-            return false;
-        }
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        return true;
+        if ($httpcode >= 200 && $httpcode < 300) {
+            return [true, ''];
+        }
+        return [false, $httpcode . ': ' . $result];
     }
 }
