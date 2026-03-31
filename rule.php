@@ -52,17 +52,21 @@ class quizaccess_campla extends access_rule_base {
         }
 
         if (settings_provider::can_configure_campla($quizform->get_context())) {
-            settings_provider::add_campla_settings_fields($quizform, $mform);
-            $cmid = $quizform->get_context()->instanceid;
-            $PAGE->requires->js_call_amd(
-                'quizaccess_campla/modalforms',
-                'modalForm',
-                ['[data-action=opencamplasubmitquizform]',
-                    \quizaccess_campla\form\sendtocamplaform::class,
-                    get_string('generatecamplaconfiguration', 'quizaccess_campla'),
-                    ['hidebuttons' => 1, 'cmid' => $cmid],
-                ],
-            );
+            if (settings_provider::is_campla_config_valid()) {
+                settings_provider::add_campla_settings_fields($quizform, $mform);
+                $cmid = $quizform->get_context()->instanceid;
+                $PAGE->requires->js_call_amd(
+                    'quizaccess_campla/modalforms',
+                    'modalForm',
+                    ['[data-action=opencamplasubmitquizform]',
+                        \quizaccess_campla\form\sendtocamplaform::class,
+                        get_string('generatecamplaconfiguration', 'quizaccess_campla'),
+                        ['hidebuttons' => 1, 'cmid' => $cmid],
+                    ],
+                );
+            } else {
+                settings_provider::add_campla_settings_placeholder($quizform, $mform);
+            }
         }
     }
 }
