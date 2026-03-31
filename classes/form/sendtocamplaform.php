@@ -171,7 +171,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
                     }
                     return [
                         'status' => 200,
-                        'message' => get_string('tokenstored', 'quizaccess_campla'),
+                        'message' => get_string('tokenstored', 'quizaccess_campla') . $result['token'],
                     ];
                 } else {
                     return [
