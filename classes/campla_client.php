@@ -95,11 +95,11 @@ class campla_client {
      * @param \stdClass $formdata The form data in a URI encoded param string
      * @return boolean on success.
      * /
-     * @return bool|int
+     * @return array
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public static function sendtocampla(\stdClass $formdata): bool|int {
+    public static function sendtocampla(\stdClass $formdata): array {
         global $USER;
 
         if (!self::$caps['canusecampla'] || !$formdata) {
@@ -143,7 +143,7 @@ class campla_client {
         $examination['end'] = self::unixtimetoiso8601($formdata->quizclosesunixtime);
         $examination['sebBrowserExamKey'] = settings_provider::get_campla_quizallowedbrowserexamkey($formdata->cmid);
         $examination['securityLevel'] = (int) $formdata->securitylevel;
-        if ((int) $formdata->securitylevel === 5) {
+        if ($formdata->securitylevel == 5) {
             $examination['quitPassword'] = $formdata->quitpassword;
         } else {
             $examination['quitPassword'] = '';
@@ -173,12 +173,13 @@ class campla_client {
 
         // Send request.
         $result = curl_exec($ch);
-        if ($result === false) {
-            die(curl_error($ch));
-            return false;
-        }
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        return true;
+        if ($httpcode !== 200) {
+            return [false, $httpcode . ': ' . $result];
+        }
+
+        return [true, ''];
     }
 }
