@@ -249,6 +249,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
 
         $mform->addElement('text', 'quitpassword', get_string('quitpassword', 'quizaccess_campla'));
         $mform->setType('quitpassword', PARAM_NOTAGS);
+        $mform->hideIf('quitpassword', 'securitylevel', 'eq', '1');
 
         $securityleveloptions = [
             '1' => get_string('securitylevellernstick', 'quizaccess_campla'),
