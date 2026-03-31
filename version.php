@@ -25,9 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->release = 'v5.1-r1';
-$plugin->version = 2025100600;
+$plugin->release = 'v5.2-r1';
+$plugin->version = 2026033100;
 $plugin->requires = 2024042200;
 $plugin->component = 'quizaccess_campla';
 $plugin->maturity = MATURITY_ALPHA;
-$plugin->supported = [404, 501];
+$plugin->supported = [404, 502];
