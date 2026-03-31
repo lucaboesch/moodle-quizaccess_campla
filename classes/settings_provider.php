@@ -80,7 +80,11 @@ class settings_provider {
     public static function add_campla_settings_placeholder(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
         if (self::can_configure_campla($quizform->get_context())) {
             self::add_campla_header_element($quizform, $mform);
-            self::add_campla_placeholdertext($quizform, $mform);
+            if (self::is_campla_config_valid()) {
+                self::add_campla_placeholdertext($quizform, $mform);
+            } else {
+                self::add_campla_configurationmissingtext($quizform, $mform);
+            }
         }
     }
 
@@ -186,6 +190,21 @@ class settings_provider {
             'html',
             '<div class="box generalbox alert alert-info">' .
             get_string('newquizinstanceinfo', 'quizaccess_campla') . '</div>',
+        );
+        self::insert_element($quizform, $mform, $element);
+    }
+
+    /**
+     * Add "CAMPLA is not yet configured" helptext.
+     *
+     * @param \mod_quiz_mod_form $quizform the quiz settings form that is being built.
+     * @param \MoodleQuickForm $mform the wrapped MoodleQuickForm.
+     */
+    protected static function add_campla_configurationmissingtext(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
+        $element = $mform->createElement(
+            'html',
+            '<div class="box generalbox alert alert-info">' .
+            get_string('camplanotconfigured', 'quizaccess_campla') . '</div>',
         );
         self::insert_element($quizform, $mform, $element);
     }
@@ -457,5 +476,20 @@ class settings_provider {
         }
 
         return $password;
+    }
+
+    /**
+     * Check whether the CAMPLA plugin is properly configured.
+     * Returns whether secret, basisurl and appid are not empty.
+     *
+     * @return bool
+     * @throws \dml_exception
+     */
+    public static function is_campla_config_valid(): bool {
+        $secret = trim(self::read_secret());
+        $basisurl = trim(self::read_camplabasisurl());
+        $appid = trim(self::read_camplaappid());
+
+        return ($secret !== '' && $basisurl !== '' && $appid !== '');
     }
 }
