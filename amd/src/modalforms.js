@@ -89,7 +89,7 @@ export const modalForm = (linkSelector, formClass, title, args = {...args, hideb
 
             // Decide toast type based on returned status
             let toastType;
-            if (resp.status === 200) {
+            if (resp.status < 300) {
                 toastType = 'success';
             } else if (resp.status === 401 || resp.status === 412) {
                 toastType = 'warning';
