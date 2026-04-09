@@ -122,9 +122,13 @@ class settings_provider {
      */
     protected static function add_campla_button(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
         $cmid = $quizform->get_context()->instanceid;
+        $now = time();
         // Are the both starttime and enddtime set?
-        if (self::get_campla_timeopen_unixtime($cmid) === 0 || self::get_campla_timeclose_unixtime($cmid) === 0) {
-            // One or both values are not set, disable the button.
+        if (
+            ((int) self::get_campla_timeopen_unixtime($cmid) === 0 || (int) self::get_campla_timeclose_unixtime($cmid) === 0) ||
+            ((int) self::get_campla_timeopen_unixtime($cmid) < time() || (int) self::get_campla_timeclose_unixtime($cmid) < time())
+        ) {
+            // One or both values are not set, or in the past, disable the button.
             $generatecamplabutton = \html_writer::tag(
                 'button',
                 get_string('generatecamplaconfiguration', 'quizaccess_campla'),
@@ -166,14 +170,22 @@ class settings_provider {
     protected static function add_campla_helptext(\mod_quiz_mod_form $quizform, \MoodleQuickForm $mform) {
         $cmid = $quizform->get_context()->instanceid;
         $boxcolor = 'alert-info';
-        // Are the both starttime and enddtime set?
-        if (self::get_campla_timeopen_unixtime($cmid) === 0 || self::get_campla_timeclose_unixtime($cmid) === 0) {
+        $message = 'generatebuttoninfo';
+        $now = time();
+        // Is one of the dates in the past?
+        if ((int) self::get_campla_timeopen_unixtime($cmid) < $now || (int) self::get_campla_timeclose_unixtime($cmid) < $now) {
             $boxcolor = 'alert-danger';
+            $message = 'generatebuttoninfo_past';
+        }
+        // Are the both starttime and enddtime set at all?
+        if ((int) self::get_campla_timeopen_unixtime($cmid) === 0 || (int) self::get_campla_timeclose_unixtime($cmid) === 0) {
+            $boxcolor = 'alert-danger';
+            $message = 'generatebuttoninfo';
         }
         $element = $mform->createElement(
             'html',
             '<div class="box generalbox alert ' . $boxcolor . '">' .
-            get_string('generatebuttoninfo', 'quizaccess_campla') . '</div>',
+            get_string($message, 'quizaccess_campla') . '</div>',
         );
         self::insert_element($quizform, $mform, $element);
     }
