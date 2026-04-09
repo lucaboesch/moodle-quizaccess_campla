@@ -60,6 +60,6 @@ $string['sendtocampla'] = 'Send to CAMPLA';
 $string['sendtocamplafail'] = 'Failed sending to CAMPLA';
 $string['sendtocamplasuccess'] = 'Sent to CAMPLA Successfully';
 $string['settingnotification'] = 'Please note that the following settings relay on a a valid set up CAMPLA (Cloud Assessment
-    Management Platform) see <a href="https://campla.github.io">https://campla.github.io</a> for more information.';
+    Management Platform) see <a href="https://campla.ch">https://campla.ch</a> for more information.';
 $string['submitlabel'] = 'Send to CAMPLA';
 $string['tokenstored'] = 'CAMPLA JWT token stored successfully.';
