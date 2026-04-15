@@ -143,27 +143,27 @@ class sendtocamplaform extends \core_form\dynamic_form {
         }
 
         if ($hostvalid) {
-            // Initiate cURL object with URL.
-            $ch = curl_init($url);
+            // Prepare request headers.
+            $headers = [
+                'Content-Type' => 'application/json',
+            ];
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+            // Send request using Moodle's download_file_content function.
+            $postdata = trim(json_encode($record), '[]');
+            $response = download_file_content($url, $headers, $postdata, true);
 
-            // Return response instead of printing.
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            // Send request.
-            $curlresult = curl_exec($ch);
-            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if ($curlresult === false) {
-                die(curl_error($ch));
-                return false;
+            // Check for errors.
+            if (!$response) {
+                return [
+                    'status' => 500,
+                    'message' => get_string('camplaservererror', 'quizaccess_campla'),
+                ];
             }
-            curl_close($ch);
+
+            $httpcode = (int)$response->status;
 
             if ($httpcode === 200) {
-                $result = json_decode($curlresult, true);
+                $result = json_decode($response->results, true);
                 if (!empty($result['token'])) {
                     if ($result['token'] !== \quizaccess_campla\token_manager::read_token()) {
                         // The token is different, so we need to save the new one.
@@ -184,25 +184,25 @@ class sendtocamplaform extends \core_form\dynamic_form {
             if ($httpcode === 401) {
                 return [
                     'status' => 401,
-                    'message' => 'The application is not authorized.',
+                    'message' => get_string('applicationunauthorized', 'quizaccess_campla'),
                 ];
             }
 
             if ($httpcode === 412) {
                 return [
                     'status' => 412,
-                    'message' => 'The login credentials does not meet the validation requirements.',
+                    'message' => get_string('wrongcredentialvalidation', 'quizaccess_campla'),
                 ];
             }
 
             return [
                 'status' => 500,
-                'message' => 'CAMPLA server error.',
+                'message' => get_string('camplaservererror', 'quizaccess_campla'),
             ];
         } else {
             return [
                 'status' => 500,
-                'message' => 'No valid CAMPLA URL configured.',
+                'message' => get_string('novalidcamplaurl', 'quizaccess_campla'),
             ];
         }
     }
