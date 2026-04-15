@@ -34,12 +34,14 @@ use core_external\external_value;
  */
 class campla extends external_api {
     /**
-     * No parameters for the JWT token request.
+     * Parameters for the JWT token request.
      *
      * @return external_function_parameters
      */
     public static function handle_jwttoken_request_parameters(): external_function_parameters {
-        return new external_function_parameters([]);
+        return new external_function_parameters([
+            'cmid' => new external_value(PARAM_INT, 'Course module ID', VALUE_REQUIRED, null, NULL_NOT_ALLOWED),
+        ]);
     }
 
     /**
@@ -47,12 +49,18 @@ class campla extends external_api {
      *
      * We validate the plugin capability there.
      *
+     * @param string $cmid Course module ID.
      * @return array ['status' => int, 'message' => string]
      */
-    public static function handle_jwttoken_request(): array {
+    public static function handle_jwttoken_request(string $cmid): array {
 
-        self::validate_parameters(self::handle_jwttoken_request_parameters(), []);
+        self::validate_parameters(self::handle_jwttoken_request_parameters(), ['cmid' => $cmid]);
         require_login();
+
+        // Perform security checks.
+        $context = \context_module::instance($cmid);
+        self::validate_context($context);
+        require_capability('quizaccess/campla:canusecampla', $context);
 
         // Delegate to the existing form static method.
         return \quizaccess_campla\form\sendtocamplaform::handle_jwttoken_request();
