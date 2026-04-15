@@ -265,9 +265,9 @@ class settings_provider {
      * Returns the quiz URL.
      *
      * @param int $cmid The course module ID.
-     * @return string The quiz url.
+     * @return \moodle_url The quiz url.
      */
-    public static function get_campla_quizurl(int $cmid): string {
+    public static function get_campla_quizurl(int $cmid): \moodle_url {
         if ($cmid === 0) {
             return '';
         }
