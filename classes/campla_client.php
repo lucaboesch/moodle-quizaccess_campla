@@ -93,9 +93,7 @@ class campla_client {
      * Send to CAMPLA.
      *
      * @param \stdClass $formdata The form data in a URI encoded param string
-     * @return boolean on success.
-     * /
-     * @return array
+     * @return array An array with a boolean and a string
      * @throws \coding_exception
      * @throws \dml_exception
      */
