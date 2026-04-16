@@ -106,7 +106,7 @@ export const modalForm = (linkSelector, formClass, title, args = {...args, hideb
             // Comes from handle_jwttoken_request() in sendtocamplaform.php
             const [request] = await Ajax.call([{
                 methodname: 'quizaccess_campla_handle_jwttoken_request',
-                args: {}
+                args: {cmid: args.cmid}
             }]);
 
             const resp = await request;
