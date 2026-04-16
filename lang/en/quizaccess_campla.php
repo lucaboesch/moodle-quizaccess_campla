@@ -25,6 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['applicationunauthorized'] = 'The application is not authorized.';
 $string['campla'] = 'CAMPLA';
 $string['campla:canusecampla'] = 'Can use CAMPLA for a quiz setup.';
 $string['camplaappid'] = 'CAMPLA Application ID';
@@ -37,6 +38,7 @@ $string['camplasecret'] = 'CAMPLA Application secret';
 $string['camplasecret_desc'] = 'The Application secret CAMPLA uses to identify the Moodle instance.';
 $string['camplasecuritylevel'] = 'CAMPLA default security level';
 $string['camplasecuritylevel_desc'] = 'The security level that should be default when sending an exam to CAMPLA.';
+$string['camplaservererror'] = 'CAMPLA server error.';
 $string['coursename'] = 'Course name';
 $string['generatebuttoninfo'] = 'The "Generate CAMPLA configuration" button is only active if there are a saved quiz start time
 ("Open the quiz") and quiz end time ("Close the quiz"). Since this form does not entirely save via AJAX, saving must have happened
@@ -51,6 +53,7 @@ $string['generatecamplaconfiguration'] = 'Generate CAMPLA configuration';
 $string['invalidtokenresponse'] = 'Invalid response from JWT token request.';
 $string['na'] = 'N/A';
 $string['newquizinstanceinfo'] = 'The settings in this section will be only visible once the quiz is created.';
+$string['novalidcamplaurl'] = 'No valid CAMPLA URL configured.';
 $string['pluginname'] = 'CAMPLA exam configuration';
 $string['privacy:metadata:quizaccess_campla:email'] = 'The email of the user using CAMPLA with this quiz.';
 $string['privacy:metadata:quizaccess_campla:externalpurpose'] = 'This information is sent to the CAMPLA server to set up an exam for a user. No user data is explicitly sent to the CAMPLA server or stored in Moodle LMS by this plugin.';
@@ -70,3 +73,5 @@ $string['settingnotification'] = 'Please note that the following settings relay 
     Management Platform) see <a href="https://campla.ch">https://campla.ch</a> for more information.';
 $string['submitlabel'] = 'Send to CAMPLA';
 $string['tokenstored'] = 'CAMPLA JWT token stored successfully.';
+$string['unknownerror'] = 'Unknown error';
+$string['wrongcredentialvalidation'] = 'The login credentials does not meet the validation requirements.';

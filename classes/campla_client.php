@@ -159,23 +159,20 @@ class campla_client {
         self::$url = settings_provider::read_camplabasisurl() . '/rest/lms/examination/';
         self::$secret = settings_provider::read_secret();
 
-        // Initiate cURL object with URL.
-        $ch = curl_init(self::$url);
+        // Prepare request headers.
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . token_manager::read_token(),
+        ];
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, trim(json_encode($record), '[]'));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json', 'Authorization: Bearer ' .
-            token_manager::read_token()]);
+        // Send request using Moodle's download_file_content function.
+        $postdata = trim(json_encode($record), '[]');
+        $response = download_file_content(self::$url, $headers, $postdata, true);
 
-        // Return response instead of printing.
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Send request.
-        $result = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($httpcode !== 200) {
-            return [false, $httpcode . ': ' . $result];
+        // Check for errors.
+        if (!$response || (int)$response->status !== 200) {
+            $errormsg = $response->error ?? $response->results ?? get_string('unknownerror', 'quizaccess_campla');
+            return [false, $response->status . ': ' . $errormsg];
         }
 
         return [true, ''];
