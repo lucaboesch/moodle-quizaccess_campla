@@ -13,8 +13,8 @@ Moodle quiz access plugin to allow for easy configuration of CAMPLA exams.
 Requirements
 ------------
 
-This plugin requires Moodle 4.4 onwards.
-This plugin requires a CAMPLA setup [campla.github.io](https://campla.github.io).
+This plugin requires Moodle 4.4 onwards.<br/>
+This plugin requires a CAMPLA setup [campla.ch](https://campla.ch/?lang=en).
 
 Installation
 ------------
@@ -23,3 +23,12 @@ Install the plugin to folder
 /mod/quiz/accessrule/campla
 
 See http://docs.moodle.org/en/Installing_plugins for details on installing Moodle plugins
+
+Configuration
+-------------
+
+CAMPLA is an infrastructure service that institutions do self host.<br/>
+It is then their duty to have the credentials and secrets set up and transferred to Moodle
+in order to get the correct configuration up and running to allow this quiz settings button
+to work properly.<br/>
+More information on how to set up CAMPLA can be found on [campla.ch](https://campla.ch/?lang=en).
