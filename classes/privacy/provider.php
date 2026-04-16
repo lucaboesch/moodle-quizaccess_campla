@@ -25,20 +25,58 @@
 
 namespace quizaccess_campla\privacy;
 
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\userlist;
+
 /**
  * Privacy Subsystem for quizaccess_campla implementing null_provider.
  *
  * @copyright  2024 BFH Bern University of Applied Sciences
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\null_provider {
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
+    #[\Override]
+    public static function get_metadata(collection $collection): collection {
+        $collection->add_external_location_link('quizaccess_campla', [
+            'email' => 'privacy:metadata:quizaccess_campla:email',
+            'firstname' => 'privacy:metadata:quizaccess_campla:firstname',
+            'lastname' => 'privacy:metadata:quizaccess_campla:lastname',
+        ], 'privacy:metadata:quizaccess_campla:externalpurpose');
+        return $collection;
+    }
+
+    #[\Override]
+    public static function get_contexts_for_userid(int $userid): contextlist {
+        return new contextlist();
+    }
+
+    #[\Override]
+    public static function get_users_in_context(userlist $userlist) {
+    }
+
+    #[\Override]
+    public static function export_user_data(approved_contextlist $contextlist) {
+    }
+
+    #[\Override]
+    public static function delete_data_for_all_users_in_context(\context $context) {
+    }
+
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * Delete multiple users within a single context.
      *
-     * @return  string
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
+    public static function delete_data_for_users(approved_userlist $userlist) {
+    }
+
+    #[\Override]
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
     }
 }
