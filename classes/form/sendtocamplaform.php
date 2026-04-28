@@ -22,6 +22,7 @@
  * @copyright  2024 BFH Bern University of Applied Sciences
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace quizaccess_campla\form;
 
 defined('MOODLE_INTERNAL') || die;
@@ -171,7 +172,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
                     }
                     return [
                         'status' => 200,
-                        'message' => get_string('tokenstored', 'quizaccess_campla') . $result['token'],
+                        'message' => get_string('tokenstored', 'quizaccess_campla'),
                     ];
                 } else {
                     return [
