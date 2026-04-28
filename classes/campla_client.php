@@ -170,7 +170,7 @@ class campla_client {
         $response = download_file_content(self::$url, $headers, $postdata, true);
 
         // Check for errors.
-        if (!$response || (int)$response->status !== 200) {
+        if (!$response || ((int)$response->status !== 200 && (int)$response->status !== 201)) {
             $errormsg = $response->error ?? $response->results ?? get_string('unknownerror', 'quizaccess_campla');
             return [false, $response->status . ': ' . $errormsg];
         }
