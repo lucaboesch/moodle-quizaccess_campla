@@ -277,7 +277,7 @@ class sendtocamplaform extends \core_form\dynamic_form {
         $mform->addElement('hidden', 'cmid');
         $mform->setType('cmid', PARAM_INT);
 
-        $mform->freeze(['quizurl', 'quizopens', 'quizcloses', 'quitpassword']);
+        $mform->freeze(['quizurl', 'quizopens', 'quizcloses']);
 
         if (empty($this->_ajaxformdata['hidebuttons'])) {
             $this->add_action_buttons(true, get_string('submitlabel', 'quizaccess_campla'));
