@@ -1,0 +1,100 @@
+# camp listing manifest — descriptive content for your plugin's page.
+# Edit freely and commit; camp ingests this file at each tagged release.
+# Schema: https://camp-registry.org/schema/listing.schema.json
+name: quizaccess_campla
+summary: Moodle quiz access plugin to allow for easy configuration of CAMPLA exams.
+description: |
+  The **CAMPLA Exam Configuration** plugin is a Moodle Quiz Access Rule that integrates Moodle quizzes with **CAMPLA (Cloud E‑Assessment Management Platform)**.
+  Its purpose is to simplify the creation and administration of digitally supervised examinations.
+
+  ## Purpose
+
+  In many institutions, exams must be configured both in Moodle and in a separate assessment platform. This plugin reduces duplicate administration by allowing
+  staff to create a CAMPLA exam directly from a Moodle quiz.
+
+  Instead of manually:
+
+  - creating an exam in CAMPLA,
+  - importing participants,
+  - entering dates,
+  - configuring security settings,
+
+  the plugin transfers relevant Moodle quiz information to CAMPLA and creates a corresponding exam configuration.
+
+  ## Key Features
+
+  ### CAMPLA Section in Quiz Settings
+
+  When the plugin is installed, users with the appropriate capabilities gain access to a **CAMPLA** section within Moodle quiz settings.
+
+  ### Generate CAMPLA Configuration
+
+  A **"Generate CAMPLA configuration"** button opens a dialog that communicates with CAMPLA and submits quiz information for exam creation.
+
+  The information sent can include:
+
+  - Quiz title
+  - Course name
+  - Participant list
+  - Quiz URL
+  - Exam start and end times
+  - Safe Exam Browser configuration or exam keys when available
+
+  ### Support for Secure Exam Environments
+
+  The plugin can transfer existing **Safe Exam Browser (SEB)** exam keys to CAMPLA and supports CAMPLA deployments that use:
+
+  - Safe Exam Browser
+  - CAMPLA Lernstick
+
+  for secure assessment environments.
+
+  ### Automated Exam Provisioning
+
+  The original project goal was to make it possible to create a CAMPLA exam from a Moodle quiz with only a few inputs and clicks,
+  minimizing manual work and reducing configuration errors.
+
+  ## Typical Workflow
+
+  1. Create and configure a Moodle quiz.
+  1. Open the CAMPLA section in the quiz settings.
+  1. Click **Generate CAMPLA configuration**.
+  1. Moodle sends the exam parameters to CAMPLA.
+  1. CAMPLA creates a matching exam configuration.
+  1. Review and adjust settings in CAMPLA if needed.
+  1. Conduct the exam using the institution's CAMPLA infrastructure. 【1-e33037】【3-02ea10】
+
+  ## Architecture
+
+  The plugin acts as a bridge between:
+
+  - Moodle Quiz
+  - CAMPLA REST API
+
+  It exchanges information using credentials configured by the Moodle administrator and communicates with a self-hosted CAMPLA installation.
+
+  ## Configuration Requirements
+
+  The institution must operate its own CAMPLA environment and configure:
+
+  - CAMPLA REST API URL
+  - CAMPLA Application ID
+  - CAMPLA Application Secret
+  - Default security level
+
+  within Moodle's plugin settings.
+
+  ## Installation
+
+  Install the plugin under:
+
+  ```/mod/quiz/accessrule/campla
+labels:
+  - fully-free
+category: quiz_accessrule
+# screenshots:
+#   - path: .camp/screenshots/overview.png
+#     caption: Main view
+links:
+   docs: https://github.com/lucaboesch/moodle-quizaccess_campla/tree/main/docs
+   issues: https://github.com/lucaboesch/moodle-quizaccess_campla/issues

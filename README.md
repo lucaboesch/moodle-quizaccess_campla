@@ -1,4 +1,4 @@
-moodle-quizarchive_campla
+moodle-quizaccess_campla
 =========================
 [![Moodle Plugin CI](https://github.com/lucaboesch/moodle-quizaccess_campla/actions/workflows/moodle-plugin-ci.yml/badge.svg?branch=main)](https://github.com/lucaboesch/moodle-quizaccess_campla/actions/workflows/moodle-plugin-ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/lucaboesch/moodle-quizaccess_campla?sort=semver&color=orange)](https://github.com/lucaboesch/moodle-quizaccess_campla/releases)
