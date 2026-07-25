@@ -4,7 +4,7 @@ moodle-quizaccess_campla
 Changes
 -------
 
-### Unreleased
+### v5.2-r2
 
 * 2026-04-10 - Improvement: Show warning for quiz dates in the past.
 * 2026-04-10 - Improvement: Switch URL to https://campla.ch.
