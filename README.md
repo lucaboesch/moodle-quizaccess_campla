@@ -1,6 +1,7 @@
 moodle-quizaccess_campla
 =========================
 [![Moodle Plugin CI](https://github.com/lucaboesch/moodle-quizaccess_campla/actions/workflows/moodle-plugin-ci.yml/badge.svg?branch=main)](https://github.com/lucaboesch/moodle-quizaccess_campla/actions/workflows/moodle-plugin-ci.yml)
+[![MDL Shield](https://img.shields.io/endpoint?url=https%3A%2F%2Fmdlshield.com%2Fapi%2Fbadge%2Fquizaccess_campla)](https://mdlshield.com/plugins/quizaccess_campla)
 [![Latest Release](https://img.shields.io/github/v/release/lucaboesch/moodle-quizaccess_campla?sort=semver&color=orange)](https://github.com/lucaboesch/moodle-quizaccess_campla/releases)
 [![PHP Support](https://img.shields.io/badge/php-8.1--8.4-blue)](https://github.com/lucaboesch/moodle-quizaccess_campla/actions)
 [![Moodle Support](https://img.shields.io/badge/Moodle-4.4--5.2+-orange)](https://github.com/lucaboesch/moodle-quizaccess_campla/actions)
